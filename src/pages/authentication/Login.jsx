@@ -2,12 +2,19 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Button, TextField, Typography, Paper, Box } from '@mui/material';
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginSuccess } from '../../features/auth/authSlice'
 import './auth-form.css'
 
 
 
 
 const Login = () => {
+const dispatch = useDispatch()
+const userInfo = useSelector((state=>state.auth))
+console.log(userInfo)
+
+
   const initialValues = {
     email: '',
     password: '',
@@ -30,6 +37,10 @@ try{
     const {userId, accessToken, refreshToken, role} = response.data
     alert('Connected')
     console.log(role, accessToken, refreshToken, userId )
+
+    dispatch(loginSuccess(response.data))
+
+    console.log(userInfo)
   }
 
 }catch(error){
@@ -57,7 +68,7 @@ try{
   };
 
   return (
-    <div   >
+    <div >
       <Paper elevation={3} style={paperStyles}  className ='register-container'     >
         <div>
           <Typography variant="h4"    className= 'title' >Login</Typography>
