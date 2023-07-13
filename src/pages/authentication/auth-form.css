@@ -1,0 +1,15 @@
+.register-container{
+    display: flex;
+   align-items: center;
+   align-content: center;
+   justify-content: center;
+padding-left: 10%;
+margin-left: 30vw;
+width: 30vw;
+height: 70vh;
+}
+
+.title{
+    text-align: center;
+
+}
