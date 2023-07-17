@@ -1,18 +1,37 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Button, TextField, Typography, Paper, Box } from '@mui/material';
+import { Button, TextField, Typography, Paper, Box , Snackbar } from '@mui/material';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginSuccess } from '../../features/auth/authSlice'
+import MuiAlert from '@mui/material/Alert';
+import * as React from 'react';
 import './auth-form.css'
 
 
 
-
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const Login = () => {
+
+  const [errorMessage, setErrorMessage] = React.useState('')
+  const [severity, setSeverity] = React.useState('')
+
+
+
+  const [snackState, setSnackState] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = snackState;
+
+
+
 const dispatch = useDispatch()
 const userInfo = useSelector((state=>state.auth))
-console.log(userInfo)
+console.log(userInfo.userName)
 
 
   const initialValues = {
@@ -34,23 +53,25 @@ console.log(userInfo)
 try{
   const response = await axios.post('http://localhost:3000/api/auth/login', values)
   if(response.status === 200){
-    const {userId, accessToken, refreshToken, role} = response.data
-    alert('Connected')
-    console.log(role, accessToken, refreshToken, userId )
-
     dispatch(loginSuccess(response.data))
+ setErrorMessage('Success')
+ setSeverity('success')
+ setSnackState({...snackState,  open : true})
 
-    console.log(userInfo)
-  }
-
+}
 }catch(error){
   const errorMessage = error.response?.data?.message || 'An error occurred';
-  alert(errorMessage);
+  setErrorMessage(errorMessage)
+  setSeverity('error')
+setSnackState({...snackState,  open : true})
 }finally{
   setSubmitting(false)
 }
   };
 
+  const handleClose = () => {
+    setSnackState({ ...snackState, open: false });
+  };
 
 
   const paperStyles = {
@@ -117,7 +138,11 @@ try{
                   >
 Login
                   </Button>
-
+                  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}  anchorOrigin={{ vertical, horizontal }} >
+        <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+    {errorMessage}
+        </Alert>
+      </Snackbar>
                 </Box>
               </Form>
             )}

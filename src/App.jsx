@@ -1,10 +1,60 @@
-import Login from './pages/authentication/Login'
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { accessTokenUpdate } from './features/auth/authSlice'
+
+
+import Admin  from './routes/Admin'
+import Client  from './routes/Client'
+import Public  from './routes/Public'
+import Developer  from './routes/Developer'
+
+
+
+
+// import {Routes, Route} from 'react-router-dom'
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 
 function App() {
+  const userInfo = useSelector((state)=>state.auth)
+
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    axios
+    .post('/api/auth/refreshAccessToken',  {refreshToken: userInfo.refreshToken } )
+    .then((response)=>{
+      const newAccessToken = response.data.newAccessToken
+
+      if(newAccessToken){
+        dispatch(accessTokenUpdate(newAccessToken))
+      }else {
+        return
+      }
+
+    })
+    .catch(error =>{
+      console.log(error)
+    })
+  },  [dispatch, userInfo.refreshToken] )
 
   return (
-    <Login/>
+    <>
+    <ThemeProvider theme={darkTheme}   >
+      <CssBaseline/>
+<Public/>
+   <Admin/>
+<Client/>
+<Developer/>
+</ThemeProvider>
+    </>
   )
 }
 
