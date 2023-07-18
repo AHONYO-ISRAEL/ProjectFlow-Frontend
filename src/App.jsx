@@ -11,7 +11,6 @@ import Developer  from './routes/Developer'
 
 
 
-
 // import {Routes, Route} from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,9 +28,10 @@ function App() {
   const dispatch = useDispatch()
   useEffect(()=>{
     axios
-    .post('/api/auth/refreshAccessToken',  {refreshToken: userInfo.refreshToken } )
+    .post('/api/auth/refreshAccessToken',  {refreshToken: userInfo.refreshToken , accessToken : userInfo.accessToken} )
     .then((response)=>{
       const newAccessToken = response.data.newAccessToken
+      console.log(newAccessToken)
 
       if(newAccessToken){
         dispatch(accessTokenUpdate(newAccessToken))
@@ -43,7 +43,10 @@ function App() {
     .catch(error =>{
       console.log(error)
     })
-  },  [dispatch, userInfo.refreshToken] )
+    
+  },  [dispatch, userInfo.refreshToken,userInfo.accessToken] )
+
+
 
   return (
     <>

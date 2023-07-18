@@ -1,12 +1,15 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch} from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import {Paper,Stack,Button,TextField,Typography,  Modal,Box,Snackbar} from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
+import { getInProgress } from '../features/project/projectSlice';
 
+
+import Projects from './Projects'
 
 
 import AddIcon from '@mui/icons-material/Add';
@@ -42,6 +45,8 @@ const formStyles = {
 
 
 const HomeBody = ({ child }) => {
+  const dispatch = useDispatch();
+
   const [errorMessage, setErrorMessage] = React.useState('')
   const [severity, setSeverity] = React.useState('')
 
@@ -61,7 +66,11 @@ const HomeBody = ({ child }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const userInfo = useSelector((state) => state.auth)
+/* eslint-disable no-unused-vars */
+  const InProgress = useSelector((state) => state.project);
+
 
   const formik = useFormik({
     initialValues: {
@@ -77,7 +86,10 @@ const HomeBody = ({ child }) => {
       console.log('Form values:', values);
       const response = await axios.post('http://localhost:3000/api/admin/project/add', values)
       if (response.status === 200) {
-        setErrorMessage('Success')
+        const response2 = await axios.get('http://localhost:3000/api/admin/project/progress/get');
+     if (response2.data)  {   dispatch(getInProgress(response2.data.projects))} // Dispatch the 'getInProgress' action to update the Redux state
+
+        setErrorMessage('Project created successfully')
         setSeverity('success')
         setSnackState({...snackState,  snackOpen : true})
         console.log(response)
@@ -149,7 +161,7 @@ const HomeBody = ({ child }) => {
 
       </Modal>
       <Typography variant='h3' sx={{ marginTop: '50px' }} >Projet en cours</Typography>
-
+      <Projects/>
     </>
   )
 }

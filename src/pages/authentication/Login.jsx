@@ -30,7 +30,7 @@ const Login = () => {
 
 
 const dispatch = useDispatch()
-const userInfo = useSelector((state=>state.auth))
+const userInfo = useSelector((state)=>state.auth)
 console.log(userInfo.userName)
 
 
