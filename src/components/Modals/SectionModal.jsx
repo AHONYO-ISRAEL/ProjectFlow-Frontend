@@ -1,4 +1,4 @@
-import { Button, TextField, Modal, Box, Snackbar } from '@mui/material';
+import {  TextField, Modal, Box, Snackbar } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import PropTypes from 'prop-types'
@@ -120,19 +120,24 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
             error={formik.touched.description && Boolean(formik.errors.description)}
             helperText={formik.touched.description && formik.errors.description}
             sx={{ marginTop: '30px' }}
+
           />
-          <TextField
-            fullWidth
-            id="startDate"
-            name="startDate"
-            label="Start Date"
-            type="date"
-            value={formik.values.startDate}
-            onChange={formik.handleChange}
-            error={formik.touched.startDate && Boolean(formik.errors.startDate)}
-            helperText={formik.touched.startDate && formik.errors.startDate}
-            sx={{ marginTop: '30px' }}
-          />
+
+<TextField
+  fullWidth
+  id="startDate"
+  name="startDate"
+  label="Start Date"
+  type="date"
+  value={formik.values.startDate}
+  onChange={formik.handleChange}
+  error={formik.touched.startDate && Boolean(formik.errors.startDate)}
+  helperText={formik.touched.startDate && formik.errors.startDate}
+  sx={{ marginTop: '30px' }}
+  InputLabelProps={{
+    shrink: true, 
+  }}
+/>
           <TextField
             fullWidth
             id="endDate"
@@ -144,6 +149,9 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
             error={formik.touched.endDate && Boolean(formik.errors.endDate)}
             helperText={formik.touched.endDate && formik.errors.endDate}
             sx={{ marginTop: '30px' }}
+            InputLabelProps={{
+              shrink: true, 
+            }}
           />
          <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
             loading = {loading}
