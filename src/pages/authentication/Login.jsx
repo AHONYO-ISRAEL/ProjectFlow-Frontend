@@ -7,13 +7,15 @@ import { loginSuccess } from '../../features/auth/authSlice'
 import MuiAlert from '@mui/material/Alert';
 import * as React from 'react';
 import './auth-form.css'
-
+import { useNavigate } from "react-router-dom";
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 const Login = () => {
+
+  const navigate = useNavigate()
 
   const [errorMessage, setErrorMessage] = React.useState('')
   const [severity, setSeverity] = React.useState('')
@@ -54,9 +56,13 @@ try{
   const response = await axios.post('http://localhost:3000/api/auth/login', values)
   if(response.status === 200){
     dispatch(loginSuccess(response.data))
- setErrorMessage('Success')
+    const link  =  userInfo.role + '/Home'
+    console.log(link)
+     setErrorMessage('Success')
  setSeverity('success')
  setSnackState({...snackState,  open : true})
+      navigate(link)
+
 
 }
 }catch(error){

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import   {useState}from 'react';
 import { styled, useTheme, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -24,7 +24,12 @@ import PropTypes  from 'prop-types';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
-import PeopleIcon from '@mui/icons-material/People';
+import SendIcon from '@mui/icons-material/Send';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import { Link } from 'react-router-dom';
+
+
+
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -113,9 +118,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const VerticalNavBar = ({ body }) => {
+const VerticalNavBar = ({ body}) => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -124,6 +132,8 @@ const VerticalNavBar = ({ body }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -172,18 +182,20 @@ const VerticalNavBar = ({ body }) => {
         <Divider />
         <List>
           {[
-            { text: 'Home', icon: <HomeIcon /> },
-            { text: 'Dashboard', icon: <DashboardIcon /> },
-            { text: 'Projects', icon: <FolderIcon /> },
-            { text: 'Collaborate', icon: <PeopleIcon /> },
-            { text: 'Team', icon: <PeopleIcon /> },
+            { text: 'Home', icon: <HomeIcon /> , link:'Home' },
+            { text: 'Dashboard', icon: <DashboardIcon /> ,link:'Dashboard'},
+            { text: 'Projects', icon: <FolderIcon />,link:'Projects'  },
+            { text: 'Collaborate', icon: <SendIcon /> , link:'Collaborate' },
+            { text: 'Manage Accounts', icon: <ManageAccountsIcon />, link:'ManageAccounts'  },
           ].map((item) => (
-            <ListItem key={item.text} disablePadding>
+            <Link key={item.text}  to={`../admin/${item.link}`} style={{color: '#fff', textDecoration: 'none'}}  >
+            <ListItem key={item.text} disablePadding       >
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
+            </Link>
           ))}
         </List>
 
@@ -198,6 +210,8 @@ const VerticalNavBar = ({ body }) => {
 
 VerticalNavBar.propTypes = {
   body: PropTypes.node,
+
+
 }
 
 export default VerticalNavBar;

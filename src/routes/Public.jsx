@@ -2,6 +2,7 @@ import  PublicElement from  '../roleElement/PublicElement'
 import Login from '../pages/authentication/Login'
 
 import {Routes, Route} from 'react-router-dom'
+import Credentials from '../pages/authentication/Credentials'
 
 const Public = ()=>{
     return(
@@ -11,6 +12,12 @@ const Public = ()=>{
                         <Login/>
                 </PublicElement>
             } />
+
+            <Route   path= {'auth/credentials' }  element={
+                <PublicElement>
+            <Credentials/>
+                </PublicElement>
+            }    />
         </Routes>
     )
 }

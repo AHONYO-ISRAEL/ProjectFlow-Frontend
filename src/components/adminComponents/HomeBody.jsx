@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { useSelector , useDispatch} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import {Paper,Stack,Button,TextField,Typography,  Modal,Box,Snackbar} from '@mui/material';
+import {Paper,Stack,TextField,Typography,  Modal,Box,Snackbar} from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
-import { getInProgress } from '../features/project/projectSlice';
 
 
-import Projects from './Projects'
+import Projects from '../Projects'
 
 
 import AddIcon from '@mui/icons-material/Add';
@@ -45,7 +45,9 @@ const formStyles = {
 
 
 const HomeBody = ({ child }) => {
-  const dispatch = useDispatch();
+
+  const [loading, setLoading] = React.useState(false);
+
 
   const [errorMessage, setErrorMessage] = React.useState('')
   const [severity, setSeverity] = React.useState('')
@@ -70,37 +72,39 @@ const HomeBody = ({ child }) => {
   const userInfo = useSelector((state) => state.auth)
 /* eslint-disable no-unused-vars */
   const InProgress = useSelector((state) => state.project);
-
-
+const auth  = useSelector((state)=>state.auth)
+console.log(auth.userId)
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
+      userId:auth.userId,
       accessToken: userInfo.accessToken,
       refreshToken: userInfo.refreshToken
     },
     validationSchema: validationSchema,
 
     onSubmit: async (values) => {
-     try {console.log('Form submitted!');
-      console.log('Form values:', values);
-      const response = await axios.post('http://localhost:3000/api/admin/project/add', values)
-      if (response.status === 200) {
-        const response2 = await axios.get('http://localhost:3000/api/admin/project/progress/get');
-     if (response2.data)  {   dispatch(getInProgress(response2.data.projects))} // Dispatch the 'getInProgress' action to update the Redux state
 
+     try {
+      setLoading(true)
+      const response = await axios.post('http://localhost:3000/api/admin/project/add', values)
+
+      if (response.status === 200) {
+        setLoading(false)
         setErrorMessage('Project created successfully')
         setSeverity('success')
         setSnackState({...snackState,  snackOpen : true})
         console.log(response)
+    
+
       }}catch(error){
         const errorMessage = error.response?.data?.message || 'An error occurred';
   setErrorMessage(errorMessage)
         setSeverity('error')      
         setSnackState({...snackState,  snackOpen : true})
-        
-        console.log('error')
-
+        setLoading(false)
+   
       }
     },
   });
@@ -152,10 +156,11 @@ const HomeBody = ({ child }) => {
               sx={{ marginTop: '50px' }}
             />
 
-            <Button type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
+            <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
+            loading = {loading}
             >
               Register Project
-            </Button>
+            </LoadingButton>
           </form>
         </Box>
 

@@ -28,7 +28,7 @@ function App() {
   const dispatch = useDispatch()
   useEffect(()=>{
     axios
-    .post('/api/auth/refreshAccessToken',  {refreshToken: userInfo.refreshToken , accessToken : userInfo.accessToken} )
+    .post('http://localhost:3000/api/auth/refreshAccessToken',  {refreshToken: userInfo.refreshToken , accessToken : userInfo.accessToken} )
     .then((response)=>{
       const newAccessToken = response.data.newAccessToken
       console.log(newAccessToken)

@@ -8,9 +8,9 @@ const ProjectCard = ({ project }) => {
 
     
   return (
-    <Card sx={{ minWidth: 275, maxWidth: 400, margin: '10px', display: 'flex' }}>
+    <Card sx={{ minWidth: 350,maxWidth: 350, minHeight: 400, maxHeight:400,  margin: '10px', display: 'flex'  ,padding : '30px' }}>
       <CardContent>
-        <Typography gutterBottom sx={{ fontSize: 20, fontWeight: 'bold' }}>
+        <Typography gutterBottom sx={{ fontWeight: 'bold' }}  variant='h3' >
           {project.name}
         </Typography>
         <Typography sx={{ fontSize: 14 }}>{project.description}</Typography>

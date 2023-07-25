@@ -9,13 +9,13 @@ const projectSlice = createSlice({
     getInProgress: (state, action) => {
       return action.payload; // Update the state to be the payload (an array of project objects)
     },
-resetProjects:()=>{
+resetProgressProjects:()=>{
     return initialState
-}
+},
 
   },
 });
 
-export const { getInProgress , resetProjects} = projectSlice.actions;
+export const { getInProgress , resetProgressProjects} = projectSlice.actions;
 
 export default projectSlice.reducer;

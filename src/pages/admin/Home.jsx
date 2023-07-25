@@ -1,6 +1,10 @@
 import { useSelector } from 'react-redux'
 import VerticalNavBar from '../../components/VerticalNavBar'
-import HomeBody from '../../components/HomeBody'
+import HomeBody from '../../components/adminComponents/HomeBody'
+import DashboardBody from '../../components/adminComponents/DashboardBody'
+import ProjectsBody from '../../components/adminComponents/ProjectsBody'
+import CollaborateBody from '../../components/adminComponents/CollaborateBody'
+import ManageAccountsBody from '../../components/adminComponents/ManageAccountsBody'
 import {Typography} from '@mui/material'
 
 
@@ -9,14 +13,30 @@ const Home = ()=>{
 
 return(
     <>
-    <VerticalNavBar      body =  { 
+    <VerticalNavBar      Home =  { 
         <>
         <HomeBody    child={
     <Typography variant='h2'>Welcome {userInfo.userName}  </Typography>
-
-        }/>
+   }/>
+ 
     </>
     }
+    Dashboard={
+        <DashboardBody/>
+    }
+
+    Projects ={
+        <ProjectsBody/>
+    }
+    Collaborate ={
+<CollaborateBody/>
+    }
+
+    ManageAccounts={
+        <ManageAccountsBody/>
+    }
+    
+
 />
     </>
 )
