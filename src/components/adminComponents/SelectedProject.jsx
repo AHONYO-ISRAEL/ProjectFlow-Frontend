@@ -14,7 +14,9 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 
 
 import SectionModal from '../Modals/SectionModal'
+import SelectDevModal from '../Modals/SelectDevModal'
 import SectionAccordion from '../SectionAccordion'
+import Avatars from "../Avatars";
 
 const Alert = forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -108,8 +110,8 @@ const SelectedProject = () => {
 
 	const [selectedClient, setSelectedClient] = useState('');
 	const [clientData, setClientData] = useState([])
-	const [projectData, setProjectData] = useState(null);
-	const [clientName, setClientName] = useState(null);
+	const [projectData, setProjectData] = useState('');
+	const [clientName, setClientName] = useState('');
 	const [loading, setLoading] = useState(true);
 
 	const getAProject = async () => {
@@ -124,14 +126,21 @@ const SelectedProject = () => {
 		}
 
 	}
+
 	const [selectClientOpen, setSelectClientOpen] = useState(false);
 	const handleSelectClientOpen = () => setSelectClientOpen(true);
 	const handleSelectClientClose = () => setSelectClientOpen(false);
 
+	const [selectDevOpen, setSelectDevOpen] = useState(false);
+	const handleSelectDevOpen = () => setSelectDevOpen(true);
+	const handleSelectDevClose = () => setSelectDevOpen(false);
 
 	const [clientModalOpen, setclientModalOpen] = useState(false);
 	const handleClientModalOpen = () => setclientModalOpen(true);
 	const handleClientModalClose = () => setclientModalOpen(false);
+
+
+
 
 
 
@@ -181,7 +190,7 @@ const SelectedProject = () => {
 
 	const getProjectSections = async () => {
 		try {
-			const sectionResponse = await  axios.get(`http://localhost:3000/api/admin/section/get/${projectId}`)
+			const sectionResponse = await axios.get(`http://localhost:3000/api/admin/section/get/${projectId}`)
 			if (sectionResponse) {
 				setSectionData(sectionResponse.data.sections)
 			}
@@ -196,6 +205,26 @@ const SelectedProject = () => {
 
 	console.log(sectionData)
 
+
+	const [projectDevsData, setProjectDevsData] = useState([])
+
+	const getProjectDevs = async () => {
+		try {
+			const devResponse = await axios.get(`http://localhost:3000/api/admin/project/${projectId}/dev`)
+			if (devResponse.status === 200) {
+				setProjectDevsData(devResponse.data.projectDevs)
+				console.log(devResponse.data.projectDevs)
+
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		getProjectDevs()
+	})
+
 	if (loading) {
 		return <h1>Loading</h1>
 	} else {
@@ -209,13 +238,13 @@ const SelectedProject = () => {
 				<Typography variant="h1" >    {projectData.name}   </Typography>
 				<Typography variant='p' > {projectData.description}  </Typography>
 			</Box>
-			<Stack direction={'row'}   sx={{justifyContent: 'spaceBetween', alignItems:'center', alignContentCenter:'center'  }}>
+			<Stack direction={'row'} sx={{ justifyContent: 'spaceBetween', alignItems: 'center', alignContentCenter: 'center' }}>
 				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', padding: '30px', textAlign: 'center' }}>
 					<CardContent>
 						<Stack direction={'row'} >
 							<img src={Deadline} style={{ height: '200px' }} />
 							<Stack direction={'column'}>
-								{projectData.startDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de debut</Button> : <Typography variant='h3'>From :  {projectData.startDate.substring(0, 10)}   </Typography>}
+								{projectData.startDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de debut</Button> : <Typography variant='h5'>From :  {projectData.startDate.substring(0, 10)}   </Typography>}
 								{projectData.endDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de fin</Button> : <Typography variant='h3'>From :  {projectData.endDate.substring(0, 10)}   </Typography>}
 							</Stack>
 						</Stack>
@@ -232,6 +261,17 @@ const SelectedProject = () => {
 						</Stack>
 					</CardContent>
 				</Card>
+				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', paddingBottom: '20px', textAlign: 'center' }}>
+					<CardContent>
+
+						<Stack direction={'column'}>
+							<Avatars   Data={projectDevsData} />
+							<Button variant="contained" color="primary" sx={{ marginTop: '50px' }} onClick={handleSelectDevOpen} >Ajouter les developpeurs </Button>
+
+						</Stack>
+					</CardContent>
+				</Card>
+				<SelectDevModal selectDevOpen={selectDevOpen} handleSelectDevClose={handleSelectDevClose} />
 				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', textAlign: 'center', alignItems: 'center', justifyContent: 'center' }}
 					onClick={handleSectionModalOpen}
 				>
@@ -315,14 +355,14 @@ const SelectedProject = () => {
 				</Modal>
 			</Stack>
 
-			<Box sx={{ flexGrow: 1, display: 'flex', width:'80vw', marginLeft : '50px', marginTop: '50px', padding:'30px' }}   >
-        <Grid container spacing={2}>
-			{
-				sectionData?.map((section) => (
-			<SectionAccordion key={section.id} Data={section} />
-				))
-			}
-			</Grid>
+			<Box sx={{ flexGrow: 1, display: 'flex', width: '80vw', marginLeft: '50px', marginTop: '50px', padding: '30px' }}   >
+				<Grid container spacing={2}>
+					{
+						sectionData?.map((section) => (
+							<SectionAccordion key={section.id} Data={section} />
+						))
+					}
+				</Grid>
 			</Box>
 		</>
 		)

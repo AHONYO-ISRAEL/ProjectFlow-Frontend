@@ -10,6 +10,7 @@ import { useSelector , } from 'react-redux';
 
 
 import { v4 as uuidv4 } from 'uuid'
+import DevTable from '../DevTable';
 
  
 
@@ -109,8 +110,15 @@ return(
           <PersonAddIcon sx={{ fontSize: 100, marginRight: '10px', cursor: 'pointer' }} onClick={handleOpen} />
           <Typography variant="h6">Ajouter un nouvel utilisateur</Typography>
         </Paper>
+
+          <Paper sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', textAlign: 'center', width: '30vw', padding: '50px', backgroundColor: '#6C63FF' }}>
+          <PersonAddIcon sx={{ fontSize: 100, marginRight: '10px', cursor: 'pointer' }} onClick={handleOpen} />
+          <Typography variant="h6">Ajouter un nouvel utilisateur</Typography>
+        </Paper>
     
         </Stack>
+        <DevTable/>
+
         <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}  anchorOrigin={{ vertical, horizontal }} >
         <Alert onClose={handleSnackClose} severity={severity} sx={{ width: '100%' }}>
     {errorMessage}

@@ -132,7 +132,7 @@ const SectionAccordion = ({ Data }) => {
     })
     const getInProgressSectionTasks = async () => {
         try {
-            const taskResponse = await axios.get(`http://localhost:3000/api/admin/task/get/In Progress /${Data.id}`)
+            const taskResponse = await axios.get(`http://localhost:3000/api/admin/task/get/In Progress/${Data.id}`)
             setIsInProgress(taskResponse.data.tasks)
         } catch (error) {
             console.log(error)
