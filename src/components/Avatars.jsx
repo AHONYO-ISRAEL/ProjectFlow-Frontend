@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup } from '@mui/material';
+import { Avatar,  } from '@mui/material';
 import PropTypes from 'prop-types';
 
 
@@ -29,13 +29,14 @@ function stringToColor(string) {
   }
 
 const Avatars = ({Data})=>{
+  console.log(Data)
     return(
 
-        <AvatarGroup  total={Data.length}   >
-        {
-          Data?.map((dev)=>(<Avatar key={dev.id}     {...stringAvatar(dev.username)} />))
-        }
-</AvatarGroup>
+ 
+        
+          Data?.map((dev)=>(<Avatar key={dev.id}     {...stringAvatar(dev.user.username)} />))
+        
+
     )
 
 }

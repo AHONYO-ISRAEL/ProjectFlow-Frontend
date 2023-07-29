@@ -16,7 +16,7 @@ return(
     <VerticalNavBar      Home =  { 
         <>
         <HomeBody    child={
-    <Typography variant='h2'>Welcome {userInfo.userName}  </Typography>
+    <Typography variant="h4">Welcome {userInfo.userName}  </Typography>
    }/>
  
     </>

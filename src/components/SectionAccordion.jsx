@@ -1,8 +1,8 @@
 import AccordionSummary from '@mui/material/AccordionSummary';
-import { Typography, Button, Accordion, AccordionDetails, TextField, Box, Modal, Snackbar, Stack, Card, CardContent, CardHeader, Paper } from '@mui/material';
+import { Typography, Button, Accordion, AccordionDetails, TextField, Box, Modal, Snackbar, Stack, } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useState, forwardRef, useEffect } from "react";
+import { useState, forwardRef,  useEffect} from "react";
 import MuiAlert from '@mui/material/Alert';
 import { useSelector, } from 'react-redux';
 import axios from "axios"
@@ -13,14 +13,15 @@ import { useParams } from "react-router-dom"
 
 import PropTypes from 'prop-types'
 
-
+import TaskSelectDevModal from './Modals/TaskSelectDevModal'
+import TaskCards from './TaskCards'
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
 
-const SectionAccordion = ({ Data }) => {
+const SectionAccordion = ({ Data ,}) => {
     const userInfo = useSelector((state) => state.auth)
     const { projectId } = useParams()
 
@@ -30,6 +31,12 @@ const SectionAccordion = ({ Data }) => {
         setExpanded(isExpanded ? panel : false);
     };
     const [loading, setLoading] = useState(false);
+
+    const [selectDevOpen, setSelectDevOpen] = useState(false);
+    const handleSelectDevOpen = () => setSelectDevOpen(true);
+    const handleSelectDevClose = () => setSelectDevOpen(false);
+
+
 
     const formStyles = {
         position: 'absolute',
@@ -61,6 +68,9 @@ const SectionAccordion = ({ Data }) => {
     const [taskModalOpen, setTaskModalOpen] = useState(false);
     const handleTaskModalOpen = () => setTaskModalOpen(true);
     const handleTaskModalClose = () => setTaskModalOpen(false);
+
+const [taskId, setTaskId] = useState()
+
 
     const taskValidationSchema = yup.object({
         taskName: yup.string().required('Task title is required'),
@@ -99,9 +109,9 @@ const SectionAccordion = ({ Data }) => {
                     setErrorMessage('Task added successfully')
                     setSeverity('success')
                     setSnackState({ ...snackState, snackOpen: true })
-                    console.log(response)
-                    console.log(values)
-
+                    setTaskId(response.data.task.id)
+                    setTaskModalOpen(false);
+                    handleSelectDevOpen()
                 }
             } catch (error) {
                 const errorMessage = error.response?.data?.message || 'An error occurred';
@@ -114,62 +124,39 @@ const SectionAccordion = ({ Data }) => {
         },
     });
 
-    const [isNotStarted, setIsNotStarted] = useState([])
-    const [isInProgress, setIsInProgress] = useState([])
-    const [isCompleted, setIsCompleted] = useState([])
+    const [tasksWithDevs, setTasksWithDevs] = useState([])
 
-    const getNotStartedSectionTasks = async () => {
-        try {
-            const taskResponse = await axios.get(`http://localhost:3000/api/admin/task/get/Not Started/${Data.id}`)
-            setIsNotStarted(taskResponse.data.tasks)
-        } catch (error) {
-            console.log(error)
-        }
+    const getAllTasksWithDevs = async()=>{
+        try{
+            const taskResponse = await axios.get(`http://localhost:3000/api/admin/section/${Data.id}/tasks/dev`)
+            if(taskResponse.status === 200){
+                setTasksWithDevs(taskResponse.data)
+                console.log(taskResponse.data)
+            }
+    }catch(error){
+        console.log(error)
     }
+}
+useEffect(()=>{
+    getAllTasksWithDevs()
+})
 
-    useEffect(() => {
-        getNotStartedSectionTasks()
-    })
-    const getInProgressSectionTasks = async () => {
-        try {
-            const taskResponse = await axios.get(`http://localhost:3000/api/admin/task/get/In Progress/${Data.id}`)
-            setIsInProgress(taskResponse.data.tasks)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
-    useEffect(() => {
-        getInProgressSectionTasks()
-    })
-    const getCompletedSectionTasks = async () => {
-        try {
-            const taskResponse = await axios.get(`http://localhost:3000/api/admin/task/get/Completed/${Data.id}`)
-            setIsCompleted(taskResponse.data.tasks)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        getCompletedSectionTasks()
-    })
-
-    console.log('ns', isNotStarted)
-    console.log('pro', isInProgress)
-    console.log('com', isCompleted)
     return (
-        <div>
+        <>
             <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical, horizontal }} >
                 <Alert onClose={handleSnackClose} severity={severity} sx={{ width: '100%' }}>
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{ width: '80vw', marginTop: '50px', }}    >
+            <div style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{ width: '80vw', marginTop: '50px', maxHeight: '70vh', 
+                    overflowY: 'auto',backgroundColor:'#B0BEA9',}}    >
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
                     id={`panel ${Data.id}`}
+                    sx={{backgroundColor:'#037971',  position: 'sticky', top: 0, zIndex: 1}}
                 >
                     <Typography sx={{ width: '33%', flexShrink: 0, fontWeight: 'bold', fontSize: '28px' }}>
                         {Data.sectionName}
@@ -177,59 +164,16 @@ const SectionAccordion = ({ Data }) => {
                     <Typography sx={{ marginLeft: '50px', left: 0 }}  >  {Data.status} </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Button variant="outlined" fullWidth onClick={handleTaskModalOpen}  >Add Tasks to {Data.sectionName} </Button>
+                    <Button variant="outlined" fullWidth onClick={handleTaskModalOpen}     >Add Tasks to {Data.sectionName} </Button>
                     <Stack direction={'row'}>
-                        <Card sx={{ minWidth: 350, maxWidth: 350, minHeight: 400, margin: '10px', display: 'flex', padding: '30px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                <CardHeader
-                                    title="Not Started"
-                                    titleTypographyProps={{ style: { color: 'blue' } }}
-                                />
-                                <CardContent>
-                                {isNotStarted?.map((task) => (
-                                    <Paper key={task.id} elevation={3} style={{ padding: '20px', marginBottom: '10px' }}>
-                                        <Typography>{task.taskName}</Typography>
-                                    </Paper>
-                                ))}
-                                </CardContent>
-                            </div>
-                        </Card>
-                        <Card sx={{ minWidth: 350, maxWidth: 350, minHeight: 400, margin: '10px', display: 'flex', padding: '30px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                <CardHeader
-                                    title="In Progress"
-                                    titleTypographyProps={{ style: { color: 'orange' } }}
-                                />
-                                <CardContent>
-                                {isInProgress?.map((task) => (
-                                    <Paper key={task.id} elevation={3} style={{ padding: '20px', marginBottom: '10px' }}>
-                                        <Typography>{task.taskName}</Typography>
-                                    </Paper>
-                                ))}
-                                </CardContent>
-                            </div>
-                        </Card>
-                        <Card sx={{ minWidth: 350, maxWidth: 350, minHeight: 400, margin: '10px', display: 'flex', padding: '30px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                <CardHeader
-                                    title="Completed"
-                                    titleTypographyProps={{ style: { color: 'green' } }}
-                                />
-                                <CardContent>
-                                {isCompleted?.map((task) => (
-                                    <Paper key={task.id} elevation={3} style={{ padding: '20px', marginBottom: '10px' }}>
-                                        <Typography>{task.taskName}</Typography>
-                                    </Paper>
-                                ))}
-                                </CardContent>
-                            </div>
-                        </Card>
+                        <TaskCards   tasks={tasksWithDevs} />
+
 
                     </Stack>
 
                 </AccordionDetails>
             </Accordion>
-
+            </div>
             <Modal open={taskModalOpen} onClose={handleTaskModalClose} aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={formStyles}  >
@@ -328,8 +272,10 @@ const SectionAccordion = ({ Data }) => {
 
             </Modal>
 
+            <TaskSelectDevModal selectDevOpen={selectDevOpen} handleSelectDevClose={handleSelectDevClose}   taskId = {taskId} />
 
-        </div>
+        </>
+
     );
 }
 

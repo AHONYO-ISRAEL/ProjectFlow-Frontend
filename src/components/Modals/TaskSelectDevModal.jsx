@@ -5,7 +5,6 @@ import axios from "axios"
 import { useEffect, useState, forwardRef } from "react";
 import MuiAlert from '@mui/material/Alert';
 import { useSelector, } from 'react-redux';
-import { useParams } from "react-router-dom"
 import { v4 as uuidv4 } from 'uuid'
 import PropTypes from 'prop-types'
 import AddIcon from '@mui/icons-material/Add';
@@ -30,8 +29,7 @@ const formStyles = {
 };
 
 
-const SelectDevModal = ({handleSelectDevClose,selectDevOpen })=>{
-	const { projectId } = useParams()
+const TaskSelectDevModal = ({handleSelectDevClose,selectDevOpen , taskId})=>{
 	const userInfo = useSelector((state) => state.auth)
 	const [devData, setDevData] = useState([])
 
@@ -117,7 +115,7 @@ console.log(devData)
     const handleProjectDev = () => {
 		try {
 
-			const response2 = axios.post(`http://localhost:3000/api/admin/project/assign/dev`, { userId: selectedDev, projectId:projectId })
+			const response2 = axios.post(`http://localhost:3000/api/admin/task/assign/dev`, { userId: selectedDev, taskId:taskId })
 			if (response2.status === 200) {
 				setErrorMessage('Client added successfully')
 				setSeverity('success')
@@ -212,9 +210,10 @@ return(
 )
 }
 
-SelectDevModal.propTypes={
+TaskSelectDevModal.propTypes={
     handleSelectDevClose: PropTypes.func,
     selectDevOpen: PropTypes.boolean,
+    taskId: PropTypes.number
 }
 
-export default  SelectDevModal
+export default  TaskSelectDevModal

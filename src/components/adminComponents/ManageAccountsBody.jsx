@@ -10,8 +10,7 @@ import { useSelector , } from 'react-redux';
 
 
 import { v4 as uuidv4 } from 'uuid'
-import DevTable from '../DevTable';
-
+import DeveloperList from './DeveloperList';
  
 
 
@@ -35,6 +34,9 @@ const formStyles = {
   
   };
   
+
+
+
 
 const ManageAccountsBody =()=>{
     const userInfo = useSelector((state) => state.auth)
@@ -117,8 +119,7 @@ return(
         </Paper>
     
         </Stack>
-        <DevTable/>
-
+<DeveloperList/>
         <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}  anchorOrigin={{ vertical, horizontal }} >
         <Alert onClose={handleSnackClose} severity={severity} sx={{ width: '100%' }}>
     {errorMessage}

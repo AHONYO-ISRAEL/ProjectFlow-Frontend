@@ -9,6 +9,8 @@ import ManageAccountsBody from '../components/adminComponents/ManageAccountsBody
 import DashboardBody from '../components/adminComponents/DashboardBody'
 import CollaborateBody from '../components/adminComponents/CollaborateBody'
 import SelectedProject from '../components/adminComponents/SelectedProject'
+import DevelopersBody from '../components/adminComponents/DevelopersBody'
+import ClientsBody from '../components/adminComponents/ClientsBody'
 
 const Admin = ()=>{
   const userInfo = useSelector((state)=>state.auth)
@@ -59,7 +61,21 @@ return(
   } />
   </AdminElement>
 } />
+<Route  path={'/admin/Developers'}  element={
+  <AdminElement>
+    <VerticalNavBar body={
+    <DevelopersBody/>
 
+    }/>
+  </AdminElement>
+}   />
+<Route  path={'/admin/Clients'}  element={
+  <AdminElement>
+    <VerticalNavBar  body={    
+    <ClientsBody/>
+} />
+  </AdminElement>
+}   />
 
     </Routes>
 )

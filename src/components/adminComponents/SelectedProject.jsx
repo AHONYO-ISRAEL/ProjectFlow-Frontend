@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useState, forwardRef } from "react";
 import { useParams } from "react-router-dom"
-import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid } from '@mui/material'
+import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid, AvatarGroup } from '@mui/material'
 import Deadline from '../../images/deadline.png'
 import Client from '../../images/client.png'
 import MuiAlert from '@mui/material/Alert';
@@ -212,8 +212,9 @@ const SelectedProject = () => {
 		try {
 			const devResponse = await axios.get(`http://localhost:3000/api/admin/project/${projectId}/dev`)
 			if (devResponse.status === 200) {
-				setProjectDevsData(devResponse.data.projectDevs)
-				console.log(devResponse.data.projectDevs)
+				setProjectDevsData(devResponse.data.projects.developers)
+				console.log(devResponse.data.projects.developers)
+
 
 			}
 		} catch (error) {
@@ -225,6 +226,8 @@ const SelectedProject = () => {
 		getProjectDevs()
 	})
 
+
+
 	if (loading) {
 		return <h1>Loading</h1>
 	} else {
@@ -234,7 +237,7 @@ const SelectedProject = () => {
 					{errorMessage}
 				</Alert>
 			</Snackbar>
-			<Box sx={{ backgroundColor: '#6C63FF', padding: '35px', borderBottomLeftRadius: '30px', borderBottomRightRadius: '30px' }} >
+			<Box sx={{ backgroundColor: '#037971', padding: '35px', borderRadius: '30px' }} >
 				<Typography variant="h1" >    {projectData.name}   </Typography>
 				<Typography variant='p' > {projectData.description}  </Typography>
 			</Box>
@@ -242,7 +245,6 @@ const SelectedProject = () => {
 				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', padding: '30px', textAlign: 'center' }}>
 					<CardContent>
 						<Stack direction={'row'} >
-							<img src={Deadline} style={{ height: '200px' }} />
 							<Stack direction={'column'}>
 								{projectData.startDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de debut</Button> : <Typography variant='h5'>From :  {projectData.startDate.substring(0, 10)}   </Typography>}
 								{projectData.endDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de fin</Button> : <Typography variant='h3'>From :  {projectData.endDate.substring(0, 10)}   </Typography>}
@@ -261,13 +263,17 @@ const SelectedProject = () => {
 						</Stack>
 					</CardContent>
 				</Card>
-				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', paddingBottom: '20px', textAlign: 'center' }}>
+				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', paddingBottom: '20px', textAlign: 'center'  , justifyContent:'center'}}>
 					<CardContent>
+				<Stack direction ={'column'}>
+					<AvatarGroup>
+					<Avatars  Data={projectDevsData}  />
+					</AvatarGroup>
+						<Stack direction={'row'}>
+							<Button variant="contained" color="primary" sx={{ marginTop: '50px' }}  >Voir les developpeurs du projet </Button>
 
-						<Stack direction={'column'}>
-							<Avatars   Data={projectDevsData} />
-							<Button variant="contained" color="primary" sx={{ marginTop: '50px' }} onClick={handleSelectDevOpen} >Ajouter les developpeurs </Button>
-
+							<Button sx={{ backgroundColor: '#6C63FF',  marginTop: '50px' }} onClick={handleSelectDevOpen}  >  <AddIcon />  </Button>
+						</Stack>
 						</Stack>
 					</CardContent>
 				</Card>

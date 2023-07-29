@@ -113,7 +113,7 @@ console.log(auth.userId)
   return (
     <>
       <Stack spacing={2} direction="row">
-        <Paper sx={{ width: '60vw', padding: '50px', backgroundColor: 'gray' }}   >
+        <Paper sx={{ width: '60vw', padding: '50px',  }}   >
           {child}
         </Paper>
         <Paper sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', textAlign: 'center', width: '30vw', padding: '50px', backgroundColor: '#6C63FF' }}>

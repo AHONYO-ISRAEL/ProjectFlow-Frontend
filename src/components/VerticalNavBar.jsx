@@ -27,6 +27,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import SendIcon from '@mui/icons-material/Send';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Link } from 'react-router-dom';
+import { AssignmentInd } from '@mui/icons-material';
 
 
 
@@ -138,8 +139,8 @@ const VerticalNavBar = ({ body}) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
+      <AppBar position="fixed" open={open} sx={{backgroundColor:'#E0EDC5', borderRadius:'15px',}}   >
+        <Toolbar  >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -149,7 +150,7 @@ const VerticalNavBar = ({ body}) => {
           >
             <MenuIcon />
           </IconButton>
-          <Search>
+          <Search   sx={{backgroundColor:'gray'}}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -162,7 +163,10 @@ const VerticalNavBar = ({ body}) => {
         </Toolbar>
       </AppBar>
       <Drawer
+      
         sx={{
+          backgroundColor:'#727D71',
+          borderRadius:'70px',
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
@@ -174,21 +178,22 @@ const VerticalNavBar = ({ body}) => {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader   sx={{backgroundColor:'##F7F7FF'}}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{          backgroundColor:'##F7F7FF', minHeight:'100vh'}} >
           {[
             { text: 'Home', icon: <HomeIcon /> , link:'Home' },
             { text: 'Dashboard', icon: <DashboardIcon /> ,link:'Dashboard'},
             { text: 'Projects', icon: <FolderIcon />,link:'Projects'  },
             { text: 'Collaborate', icon: <SendIcon /> , link:'Collaborate' },
-            { text: 'Manage Accounts', icon: <ManageAccountsIcon />, link:'ManageAccounts'  },
+            {text: 'Developers',icon: <AssignmentInd/>, link:'Developers'},
+            {text:'Clients', icon: <AssignmentInd/>  , link:'Clients'}
           ].map((item) => (
-            <Link key={item.text}  to={`../admin/${item.link}`} style={{color: '#fff', textDecoration: 'none'}}  >
+            <Link key={item.text}  to={`../admin/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >
             <ListItem key={item.text} disablePadding       >
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -200,7 +205,7 @@ const VerticalNavBar = ({ body}) => {
         </List>
 
       </Drawer>
-      <Main open={open}>
+      <Main open={open}   sx={{backgroundColor:'#E0EDC5', minHeight:'100vh'}}>
         <DrawerHeader />
         {body}
       </Main>

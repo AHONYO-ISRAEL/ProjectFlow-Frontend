@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, CardContent, Typography, Stack,   } from '@mui/material';
+import { Card, CardContent, Typography, Stack,   AvatarGroup} from '@mui/material';
 import axios from "axios"
 import { useEffect, useState, } from "react";
 import Avatars from './Avatars';
@@ -19,8 +19,8 @@ const [projectDevsData, setProjectDevsData] = useState([])
     try {
       const devResponse = await axios.get(`http://localhost:3000/api/admin/project/${project.id}/dev`)
       if(devResponse.status===200){
-        setProjectDevsData(devResponse.data.projectDevs)
-        console.log(devResponse.data.projectDevs)
+        setProjectDevsData(devResponse.data.projects.developers)
+        console.log(devResponse.data.projects.developers)
 
       }
     } catch (error) {
@@ -61,7 +61,9 @@ const [projectDevsData, setProjectDevsData] = useState([])
         )}
         <Typography>Status: {project.status}</Typography>
         <Stack direction="row" spacing={2} sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
+          <AvatarGroup>
           <Avatars    Data={projectDevsData}/>
+          </AvatarGroup>
       </Stack>
       </CardContent>
 
