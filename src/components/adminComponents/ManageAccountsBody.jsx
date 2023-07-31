@@ -1,16 +1,13 @@
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MuiAlert from '@mui/material/Alert';
-
-import {Paper,Stack,Button,TextField,Typography,  Modal,Box,Snackbar, MenuItem} from '@mui/material';
+import {Button,TextField,  Modal,Box,Snackbar, } from '@mui/material';
 import * as React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useSelector , } from 'react-redux';
-
+import PropTypes from 'prop-types'
 
 import { v4 as uuidv4 } from 'uuid'
-import DeveloperList from './DeveloperList';
  
 
 
@@ -38,7 +35,7 @@ const formStyles = {
 
 
 
-const ManageAccountsBody =()=>{
+const ManageAccountsBody =({open ,handleClose, role})=>{
     const userInfo = useSelector((state) => state.auth)
 
     const [errorMessage, setErrorMessage] = React.useState('')
@@ -60,7 +57,7 @@ const ManageAccountsBody =()=>{
         username: '',
         email: '',
         password: uuidv4(), // Generate a random password using uuidv4
-        roleName: 'Developer',
+        roleName: role,
         accessToken: userInfo.accessToken,
         refreshToken: userInfo.refreshToken
       };
@@ -100,26 +97,12 @@ if(response.status === 200){
       });
 
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+
 
 return(
     <>
       
-    <Stack direction = {"row"}  spacing={2}>
-          <Paper sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', textAlign: 'center', width: '30vw', padding: '50px', backgroundColor: '#6C63FF' }}>
-          <PersonAddIcon sx={{ fontSize: 100, marginRight: '10px', cursor: 'pointer' }} onClick={handleOpen} />
-          <Typography variant="h6">Ajouter un nouvel utilisateur</Typography>
-        </Paper>
 
-          <Paper sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', textAlign: 'center', width: '30vw', padding: '50px', backgroundColor: '#6C63FF' }}>
-          <PersonAddIcon sx={{ fontSize: 100, marginRight: '10px', cursor: 'pointer' }} onClick={handleOpen} />
-          <Typography variant="h6">Ajouter un nouvel utilisateur</Typography>
-        </Paper>
-    
-        </Stack>
-<DeveloperList/>
         <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}  anchorOrigin={{ vertical, horizontal }} >
         <Alert onClose={handleSnackClose} severity={severity} sx={{ width: '100%' }}>
     {errorMessage}
@@ -150,22 +133,7 @@ return(
         helperText={formik.touched.email && formik.errors.email}
         sx={{marginTop:'30px'}}
       />
- <TextField
-        fullWidth
-        id="roleName"
-        name="roleName"
-        label="Role"
-        select
-        value={formik.values.roleName }
-        onChange={formik.handleChange}
-        error={formik.touched.roleName && Boolean(formik.errors.roleName)}
-        helperText={formik.touched.roleName && formik.errors.roleName}
-        sx={{marginTop:'30px'}}
-      >
-        <MenuItem value="Developer">Developer</MenuItem>
-        <MenuItem value="Client">Client</MenuItem>
-        <MenuItem value="Admin">Admin</MenuItem>
-      </TextField>
+
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
         Submit
       </Button>
@@ -173,6 +141,13 @@ return(
     </Modal>
     </>
 )
+}
+
+
+ManageAccountsBody.propTypes={
+  open: PropTypes.boolean,
+  handleClose: PropTypes.func,
+  role: PropTypes.string
 }
 
 export default ManageAccountsBody

@@ -8,7 +8,7 @@ import MuiAlert from '@mui/material/Alert';
 import * as React from 'react';
 import './auth-form.css'
 import { useNavigate } from "react-router-dom";
-
+//import  Logo 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -33,7 +33,7 @@ const Login = () => {
 
 const dispatch = useDispatch()
 const userInfo = useSelector((state)=>state.auth)
-console.log(userInfo.userName)
+console.log(userInfo)
 
 
   const initialValues = {
@@ -61,7 +61,7 @@ try{
      setErrorMessage('Success')
  setSeverity('success')
  setSnackState({...snackState,  open : true})
-      navigate(link)
+      navigate(response.data.role+'/Home')
 
 
 }
@@ -95,7 +95,7 @@ setSnackState({...snackState,  open : true})
   };
 
   return (
-    <div >
+    < >
       <Paper elevation={3} style={paperStyles}  className ='register-container'     >
         <div>
           <Typography variant="h4"    className= 'title' >Login</Typography>
@@ -155,7 +155,7 @@ Login
           </Formik>
         </div>
       </Paper>
-    </div>
+    </>
   );
 };
 

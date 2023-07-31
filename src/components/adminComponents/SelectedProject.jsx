@@ -2,7 +2,6 @@ import axios from "axios"
 import { useEffect, useState, forwardRef } from "react";
 import { useParams } from "react-router-dom"
 import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid, AvatarGroup } from '@mui/material'
-import Deadline from '../../images/deadline.png'
 import Client from '../../images/client.png'
 import MuiAlert from '@mui/material/Alert';
 import AddIcon from '@mui/icons-material/Add';

@@ -156,7 +156,8 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
          <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
             loading = {loading}
             >
-Create Section            </LoadingButton>
+Create Section      
+      </LoadingButton>
         </Box>
       </Modal>
     </>

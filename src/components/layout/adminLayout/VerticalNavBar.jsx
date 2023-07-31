@@ -25,10 +25,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
 import SendIcon from '@mui/icons-material/Send';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Link } from 'react-router-dom';
 import { AssignmentInd } from '@mui/icons-material';
-
+// import  Logos from  '../images/logo.png'
 
 
 
@@ -179,6 +178,7 @@ const VerticalNavBar = ({ body}) => {
         open={open}
       >
         <DrawerHeader   sx={{backgroundColor:'##F7F7FF'}}>
+        {/* <Logos/> */}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>

@@ -1,6 +1,6 @@
 import  AdminElement from  '../roleElement/AdminElement'
 import {Routes, Route} from 'react-router-dom'
-import VerticalNavBar from '../components/VerticalNavBar'
+import VerticalNavBar from '../components/layout/adminLayout/VerticalNavBar'
 import ProjectsBody from '../components/adminComponents/ProjectsBody'
 import HomeBody from '../components/adminComponents/HomeBody'
 import { Typography } from '@mui/material'
