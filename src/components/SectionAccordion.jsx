@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom"
 
 import PropTypes from 'prop-types'
 
-import TaskSelectDevModal from './Modals/TaskSelectDevModal'
+import TaskSelectDevModal from './adminComponents/adminModals/TaskSelectDevModal'
 import TaskCards from './TaskCards'
 
 const Alert = forwardRef(function Alert(props, ref) {
@@ -151,12 +151,12 @@ useEffect(()=>{
             </Snackbar>
             <div style={{ position: 'sticky', top: 0, zIndex: 1 }}>
             <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{ width: '80vw', marginTop: '50px', maxHeight: '70vh', 
-                    overflowY: 'auto',backgroundColor:'#B0BEA9',}}    >
+                    overflowY: 'auto',}}    >
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
                     id={`panel ${Data.id}`}
-                    sx={{backgroundColor:'#037971',  position: 'sticky', top: 0, zIndex: 1}}
+                    sx={{backgroundColor:'rgba(91,208,236,1)',  position: 'sticky', top: 0, zIndex: 1}}
                 >
                     <Typography sx={{ width: '33%', flexShrink: 0, fontWeight: 'bold', fontSize: '28px' }}>
                         {Data.sectionName}

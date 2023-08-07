@@ -30,8 +30,9 @@ const StartTask = ({ devId, startTaskOpen, handleStartTaskClose }) => {
 
   const handleSubmit = async () => {
     try {
+      const newStatus = 'In Progress'
       setLoading(true);
-      const response = await axios.post(`http://localhost:3000/api/task/${taskId}/update/status/`);
+      const response = await axios.post(`http://localhost:3000/api/task/${taskId}/update/status/${newStatus}`);
         if(response.status === 200){
             setSnackbarOpen(true);
 

@@ -20,15 +20,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import PropTypes  from 'prop-types';
 
-// Import the icons you want to use
-import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
-import SendIcon from '@mui/icons-material/Send';
+import GroupsIcon from '@mui/icons-material/Groups';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 import { Link } from 'react-router-dom';
 import { AssignmentInd } from '@mui/icons-material';
 // import  Logos from  '../images/logo.png'
-
+import Logos from '../../../images/logo.png'
 
 
 
@@ -71,7 +70,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -83,6 +82,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     }),
     marginLeft: `-${drawerWidth}px`,
     ...(open && {
+      width: `calc(100% - ${drawerWidth}px)`,
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -138,7 +138,7 @@ const VerticalNavBar = ({ body}) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{backgroundColor:'#E0EDC5', borderRadius:'15px',}}   >
+      <AppBar position="fixed" open={open} sx={{backgroundColor: '  rgba(91,208,236,2)', borderBottomLeftRadius:'5px',  borderBottomRightRadius:'5px'}}   >
         <Toolbar  >
           <IconButton
             color="inherit"
@@ -149,7 +149,7 @@ const VerticalNavBar = ({ body}) => {
           >
             <MenuIcon />
           </IconButton>
-          <Search   sx={{backgroundColor:'gray'}}>
+          <Search   >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -164,11 +164,10 @@ const VerticalNavBar = ({ body}) => {
       <Drawer
       
         sx={{
-          backgroundColor:'#727D71',
-          borderRadius:'70px',
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
+            // backgroundColor: '  rgba(91,208,236,2)',
             width: drawerWidth,
             boxSizing: 'border-box',
           },
@@ -177,27 +176,26 @@ const VerticalNavBar = ({ body}) => {
         anchor="left"
         open={open}
       >
-        <DrawerHeader   sx={{backgroundColor:'##F7F7FF'}}>
-        {/* <Logos/> */}
+        <DrawerHeader sx={{backgroundColor:'#fff', borderBottomRightRadius:'5px'}} >
+    <img src={Logos}  style={{width:'80%'}}></img> 
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{          backgroundColor:'##F7F7FF', minHeight:'100vh'}} >
+        <List>
           {[
-            { text: 'Home', icon: <HomeIcon /> , link:'Home' },
-            { text: 'Dashboard', icon: <DashboardIcon /> ,link:'Dashboard'},
-            { text: 'Projects', icon: <FolderIcon />,link:'Projects'  },
-            { text: 'Collaborate', icon: <SendIcon /> , link:'Collaborate' },
-            {text: 'Developers',icon: <AssignmentInd/>, link:'Developers'},
+            { text: 'Accueil', icon: <DashboardIcon /> , link:'Home' },
+            { text: 'Projets', icon: <FolderIcon />,link:'Projects'  },
+            { text: 'Collaboration', icon: <GroupsIcon /> , link:'Collaborate' },
+            {text: 'Developpeurs',icon: <EngineeringIcon/>, link:'Developers'},
             {text:'Clients', icon: <AssignmentInd/>  , link:'Clients'}
           ].map((item) => (
             <Link key={item.text}  to={`../admin/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >
             <ListItem key={item.text} disablePadding       >
               <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemIcon  >{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text}     />
               </ListItemButton>
             </ListItem>
             </Link>
@@ -205,7 +203,7 @@ const VerticalNavBar = ({ body}) => {
         </List>
 
       </Drawer>
-      <Main open={open}   sx={{backgroundColor:'#E0EDC5', minHeight:'100vh'}}>
+      <Main open={open} sx={{alignItems: 'center', justifyContent:'center', alignContent:'center' , backgroundColor:'#f2f2f2', minHeight:'100vh' ,}}   >
         <DrawerHeader />
         {body}
       </Main>

@@ -20,11 +20,11 @@ const formStyles = {
   transform: 'translate(-50%, -50%)',
   width: '25vw',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border:'solid 1px rgba(91,208,236,1) ',
   boxShadow: 24,
   p: 4,
   padding: '70px',
-  borderRadius: '45px'
+  borderRadius: '5px'
 };
 
 const SectionModal = ({  isModalOpen, closeModal }) => {

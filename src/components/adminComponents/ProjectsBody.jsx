@@ -3,8 +3,7 @@ import axios from 'axios';
 import { Grid, Box, Typography } from '@mui/material';
 import ProjectCard from '../ProjectCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProjects } from '../../features/project/allProjectSlice';
-import { resetAllProjects } from '../../features/project/allProjectSlice';
+import { getAllProjects , resetAllProjects} from '../../features/project/allProjectSlice';
 import { Link, useParams } from 'react-router-dom';
 
 const ProjectsBody = () => {
@@ -59,7 +58,6 @@ const ProjectsBody = () => {
       </Box>
     );
   } else {
-    // If no projects are available, show a message
     return <Typography variant="h3">No Project  Created</Typography>;
   }
 };

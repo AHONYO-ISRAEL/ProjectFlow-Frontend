@@ -2,11 +2,14 @@ import axios from 'axios'
 import {useEffect, useState} from 'react'
 import {Accordion,AccordionSummary, AccordionDetails,Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { blue, orange, green,  } from '@mui/material/colors';
+import  ManageAccountsBody from './ManageAccountsBody'
 
 
 const DevelopersBody = () => {
 const [devData, setDevData] = useState([])
-
+const [open, setOpen] = useState(false);
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
   const getdevData= async()=>{
 try{
 const devResponse = await axios.get('http://localhost:3000/api/admin/dev/task/get')
@@ -21,6 +24,8 @@ setDevData(devResponse.data)
 
   return (
     <>
+                <Button  onClick={handleOpen} >Ajouter un nouveau developpeur</Button>
+
  {devData.map((dev) => (
         <Accordion key={dev.id} sx={{maxHeight: '70vh', 
         overflowY: 'auto',backgroundColor:'#B0BEA9',}}   >
@@ -65,6 +70,8 @@ setDevData(devResponse.data)
           </AccordionDetails>
         </Accordion>
       ))}
+         <ManageAccountsBody open={open} handleClose={handleClose} role={'developer'}   />
+
     </>
   )
 }

@@ -1,13 +1,16 @@
 import axios from "axios"
 import { useParams } from "react-router-dom"
 import { useEffect, useState, } from "react";
-import { Box, Typography, Grid , Card, CardContent, Stack, Button} from '@mui/material'
+import { Box, Typography, Grid , Card, CardContent, Stack, } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info';
+import ProjectInfo from "../devModals/ProjectInfo";
+import TaskBoard from "../TaskBoard";
+import { useSelector } from "react-redux";
 
 
 const SelectedProject = () => {
     const { projectId } = useParams()
-
+const userInfo = useSelector((state)=>state.auth)
 
     const [projectData, setProjectData] = useState('');
     const [clientName, setClientName] = useState('');
@@ -29,29 +32,35 @@ const SelectedProject = () => {
         getAProject()
     }, [projectId])
 
+
+const [projectInfoOpen , setProjectInfoOpen] = useState(false)
+const  handleProjectInfoOpen = ()=> setProjectInfoOpen(true)
+const  handleProjectInfoClose = ()=> setProjectInfoOpen(false)
+
     return (
         <>
-            <Grid container  spacing={2} >
+            <Grid container  spacing={2}  sx={{marginBottom:'30px'}} >
                 <Grid item xs={8}>
-                    <Box sx={{ backgroundColor: '#037971', padding: '30px', borderRadius:'10px'}} >
-                        <Typography variant="h1" >    {projectData.name}   </Typography>
+                    <Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '36px', borderRadius: '5px',  boxShadow:'0px 1px 2px gray'}}  >
+                        <Typography variant="h3" >    {projectData.name}   </Typography>
                         <Typography variant='p' > {projectData.description}  </Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={4} >
-				<Card sx={{ Width: 400, display: 'flex', paddingBottom: '20px', textAlign: 'center' }}>
+				<Card sx={{ Width: 400, display: 'flex', textAlign: 'center' }} onClick={handleProjectInfoOpen} >  
 					<CardContent sx={{textAlign:'center'}}>
 
-						<Stack direction={'column'}>
-                            <InfoIcon  sx={{ fontSize: 100, marginRight: '10px', cursor: 'pointer' }} />
-							{projectData.clientId === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }}  >Ajouter le client </Button> : <Typography variant='h6' > {clientName}  </Typography>
-							}
+						<Stack direction={'column'} sx={{textAlign:'center'}}>
+                            <InfoIcon  sx={{ fontSize: 80, cursor: 'pointer' }} />
+							<Typography  variant="h6" fontWeight={'bold'}  >Voir les informations du projet </Typography>
 
 						</Stack>
 					</CardContent>
 				</Card>
                 </Grid>
             </Grid>
+            <TaskBoard  userId={userInfo.userId}   projectId={ parseInt(projectId)  } sx={{marginTop:'30px'}} />
+            <ProjectInfo  projectInfoOpen={projectInfoOpen}  handleProjectInfoClose={handleProjectInfoClose} projectData={projectData}  clientName={clientName}  />
         </>
     )
 }

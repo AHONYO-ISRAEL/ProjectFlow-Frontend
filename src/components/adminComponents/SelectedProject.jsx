@@ -2,7 +2,6 @@ import axios from "axios"
 import { useEffect, useState, forwardRef } from "react";
 import { useParams } from "react-router-dom"
 import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid, AvatarGroup } from '@mui/material'
-import Client from '../../images/client.png'
 import MuiAlert from '@mui/material/Alert';
 import AddIcon from '@mui/icons-material/Add';
 import { useFormik } from 'formik';
@@ -12,8 +11,8 @@ import { v4 as uuidv4 } from 'uuid'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
 
-import SectionModal from '../Modals/SectionModal'
-import SelectDevModal from '../Modals/SelectDevModal'
+import SectionModal from './adminModals/SectionModal'
+import SelectDevModal from './adminModals/SelectDevModal'
 import SectionAccordion from '../SectionAccordion'
 import Avatars from "../Avatars";
 
@@ -29,11 +28,11 @@ const formStyles = {
 	transform: 'translate(-50%, -50%)',
 	width: '25vw',
 	bgcolor: 'background.paper',
-	border: '2px solid #000',
+	border: 'solid 1px rgba(91,208,236,1) ',
 	boxShadow: 24,
 	p: 4,
 	padding: '70px',
-	borderRadius: '45px'
+	borderRadius: '5px'
 
 };
 
@@ -236,59 +235,70 @@ const SelectedProject = () => {
 					{errorMessage}
 				</Alert>
 			</Snackbar>
-			<Box sx={{ backgroundColor: '#037971', padding: '35px', borderRadius: '30px' }} >
-				<Typography variant="h1" >    {projectData.name}   </Typography>
-				<Typography variant='p' > {projectData.description}  </Typography>
-			</Box>
-			<Stack direction={'row'} sx={{ justifyContent: 'spaceBetween', alignItems: 'center', alignContentCenter: 'center' }}>
-				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', padding: '30px', textAlign: 'center' }}>
-					<CardContent>
-						<Stack direction={'row'} >
-							<Stack direction={'column'}>
-								{projectData.startDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de debut</Button> : <Typography variant='h5'>From :  {projectData.startDate.substring(0, 10)}   </Typography>}
-								{projectData.endDate === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} >Ajouter la date de fin</Button> : <Typography variant='h3'>From :  {projectData.endDate.substring(0, 10)}   </Typography>}
-							</Stack>
+			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px',  boxShadow:'0px 1px 2px gray'}} >
+				<Grid container spacing={2}>
+					<Grid item xs={8} >
+						<Typography variant="h3"  sx={{color:'#fff'}} >   Project /  {projectData.name}   </Typography>
+						<Typography variant='p' sx={{color:'#fff'}}  > {projectData.description}  </Typography>
+					</Grid>
+					<Grid item xs={4}>
+						<Stack direction={'column'} sx={{ textAlign: 'center' }}  >
+							{projectData.startDate === null ? <Button sx={{backgroundColor: '  rgba(91,208,236,1)', marginTop: '50px', color:'white'}} >Ajouter la date de debut</Button> : <Typography variant='h5'>From :  {projectData.startDate.substring(0, 10)}   </Typography>}
+							{projectData.endDate === null ? <Button  sx={{backgroundColor: '  rgba(91,208,236,1)', marginTop: '50px', color:'white' }} >Ajouter la date de fin</Button> : <Typography variant='h3'>From :  {projectData.endDate.substring(0, 10)}   </Typography>}
 						</Stack>
-					</CardContent>
-				</Card>
-				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', paddingBottom: '20px', textAlign: 'center' }}>
-					<CardContent>
+					</Grid>
+				</Grid>
 
-						<Stack direction={'column'}>
-							<img src={Client} style={{ height: '150px', }} />
+			</Box>
+			<Grid container spacing={2} marginTop={'15px'} >
+
+				<Grid item xs={4}>
+					<Card sx={{ height: '180px', }}>
+						<CardContent>
+
+
 							{projectData.clientId === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} onClick={handleSelectClientOpen} >Ajouter le client </Button> : <Typography variant='h6' > {clientName}  </Typography>
 							}
 
-						</Stack>
-					</CardContent>
-				</Card>
-				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', paddingBottom: '20px', textAlign: 'center'  , justifyContent:'center'}}>
-					<CardContent>
-				<Stack direction ={'column'}>
-					<AvatarGroup>
-					<Avatars  Data={projectDevsData}  />
-					</AvatarGroup>
-						<Stack direction={'row'}>
-							<Button variant="contained" color="primary" sx={{ marginTop: '50px' }}  >Voir les developpeurs du projet </Button>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid xs={4} item  >
+					<Card sx={{ height: '180px', }}>
+						<CardContent>
+							<Stack direction={'column'} sx={{ alignContent: 'flex-end', display: 'flex' }} >
+								<Stack direction={'row'} sx={{ alignItems: 'end', alignContent: 'flex-end', display: 'flex', marginBottom: '26px' }}>
+									<AvatarGroup>
+										<Avatars Data={projectDevsData} />
+									</AvatarGroup>
+									<Button sx={{ backgroundColor: ' rgba(91,208,236,1)', height: '40px', width: '50px' }} onClick={handleSelectDevOpen} fullWidth >  <AddIcon />  </Button>
+								</Stack>
+								<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }}  >Voir les developpeurs du projet </Button>
+							</Stack>
+						</CardContent>
+					</Card>
+				</Grid>
+				<Grid xs={4} item>
+					<Card sx={{ height: '180px' }}
+						onClick={handleSectionModalOpen}
+					>
+						<CardContent sx={{ textAlign: 'center' }}>
 
-							<Button sx={{ backgroundColor: '#6C63FF',  marginTop: '50px' }} onClick={handleSelectDevOpen}  >  <AddIcon />  </Button>
-						</Stack>
-						</Stack>
-					</CardContent>
-				</Card>
+							<Stack direction={'column'}   sx={{textAlign:'center', alignItems:'center'}}>
+								<AssignmentIcon sx={{ fontSize: 80, cursor: 'pointer' }} />
+								<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', marginTop:'18px' }}  >Ajouter une nouvelle section </Button>
+
+							</Stack>
+						</CardContent>
+					</Card>
+				</Grid>
+			</Grid>
+			<Stack direction={'row'} sx={{ justifyContent: 'spaceBetween', alignItems: 'center', alignContentCenter: 'center' }}>
+
+
+
 				<SelectDevModal selectDevOpen={selectDevOpen} handleSelectDevClose={handleSelectDevClose} />
-				<Card sx={{ Width: 400, minHeight: 250, maxHeight: 250, margin: '10px', display: 'flex', textAlign: 'center', alignItems: 'center', justifyContent: 'center' }}
-					onClick={handleSectionModalOpen}
-				>
-					<CardContent sx={{ textAlign: 'center' }}>
 
-						<Stack direction={'column'}>
-							<AssignmentIcon sx={{ fontSize: 100, cursor: 'pointer', marginLeft: '30%' }} />
-							<Typography variant='h6'> Ajouter une nouvelle section   </Typography>
-
-						</Stack>
-					</CardContent>
-				</Card>
 				<SectionModal isModalOpen={sectionModalOpen} closeModal={handleSectionModalClose} />
 				<Modal open={selectClientOpen} onClose={handleSelectClientClose} aria-labelledby="modal-modal-selectClient"
 					aria-describedby="modal-modal-description" >
@@ -310,9 +320,9 @@ const SelectedProject = () => {
 								}
 
 							</Select>
-							<Button sx={{ backgroundColor: '#6C63FF' }} onClick={handleClientModalOpen}   >  <AddIcon />  </Button>
+							<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }} onClick={handleClientModalOpen}   >  <AddIcon />  </Button>
 						</Stack>
-						<Button sx={{ backgroundColor: '#6C63FF' }} onClick={handleClientUpdate} >Valider</Button>
+						<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }}  onClick={handleClientUpdate} >Valider</Button>
 
 						<Modal open={clientModalOpen} onClose={handleClientModalClose} aria-labelledby="modal-modal-title"
 							aria-describedby="modal-modal-description">
@@ -351,7 +361,7 @@ const SelectedProject = () => {
 									sx={{ marginTop: '30px' }}
 								>
 								</TextField>
-								<Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+								<Button type="submit" variant="contained" sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff',  mt: 2 }} >
 									Submit
 								</Button>
 							</Box>
@@ -360,8 +370,8 @@ const SelectedProject = () => {
 				</Modal>
 			</Stack>
 
-			<Box sx={{ flexGrow: 1, display: 'flex', width: '80vw', marginLeft: '50px', marginTop: '50px', padding: '30px' }}   >
-				<Grid container spacing={2}>
+			<Box sx={{ flexGrow: 1, display: 'flex', width: '80vw', marginTop: '50px'}}   >
+				<Grid container >
 					{
 						sectionData?.map((section) => (
 							<SectionAccordion key={section.id} Data={section} />

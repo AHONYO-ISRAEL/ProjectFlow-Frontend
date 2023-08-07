@@ -21,10 +21,9 @@ import InputBase from '@mui/material/InputBase';
 import PropTypes  from 'prop-types';
 
 // Import the icons you want to use
-import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
-import SendIcon from '@mui/icons-material/Send';
+import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from 'react-router-dom';
 import TaskIcon from '@mui/icons-material/Task';// import  Logos from  '../images/logo.png'
 
@@ -163,8 +162,7 @@ const VerticalNavBar = ({ body}) => {
       <Drawer
       
         sx={{
-          backgroundColor:'#727D71',
-          borderRadius:'70px',
+
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
@@ -183,12 +181,11 @@ const VerticalNavBar = ({ body}) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{          backgroundColor:'##F7F7FF', minHeight:'100vh'}} >
+        <List sx={{ backgroundColor:'##F7F7FF', }} >
           {[
-            { text: 'Home', icon: <HomeIcon /> , link:'Home' },
-            { text: 'Dashboard', icon: <DashboardIcon /> ,link:'Dashboard'},
+            { text: 'Dashboard', icon: <DashboardIcon /> ,link:'Home'},
             { text: 'Projects', icon: <FolderIcon />,link:'Projects'  },
-            { text: 'Collaborate', icon: <SendIcon /> , link:'Collaborate' },
+            { text: 'Collaborate', icon: <GroupsIcon /> , link:'Collaborate' },
             {text:'Task', icon:<TaskIcon/>, link:'Task'},
           ].map((item) => (
             <Link key={item.text}  to={`../developer/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >

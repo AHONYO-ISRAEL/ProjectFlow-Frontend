@@ -25,6 +25,7 @@ useEffect(()=>{
 
   return (
     <>
+            <Button  onClick={handleOpen} >Ajouter un nouveau client</Button>
    <TableContainer  component={Paper}   >
     <Table>
       <TableHead>
@@ -36,7 +37,6 @@ useEffect(()=>{
       </TableHead>
       <TableBody>
         <TableRow hover = 'true'>
-        <Button  onClick={handleOpen} >Ajouter un nouveau developpeur</Button>
         </TableRow>
         {
           clientData?.map((client)=>(

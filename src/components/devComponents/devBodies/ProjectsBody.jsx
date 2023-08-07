@@ -45,15 +45,15 @@ const ProjectsBody = () => {
             sx={{
               minWidth: 300,
               maxWidth: 300,
-              minHeight: 300,
-              maxHeight: 350,
+              minHeight: 250,
+              maxHeight: 300,
               margin: '10px',
               display: 'flex',
               padding: '30px',
             }}
           >
             <CardContent>
-              <Typography gutterBottom sx={{ fontWeight: 'bold' }} variant="h3">
+              <Typography gutterBottom sx={{ fontWeight: 'bold' }} variant="h4">
                 {project.name}
               </Typography>
               <Typography sx={{ fontSize: 14 }}>{project.description}</Typography>

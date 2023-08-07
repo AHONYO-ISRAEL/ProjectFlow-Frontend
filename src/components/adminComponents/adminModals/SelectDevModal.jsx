@@ -21,11 +21,11 @@ const formStyles = {
 	transform: 'translate(-50%, -50%)',
 	width: '25vw',
 	bgcolor: 'background.paper',
-	border: '2px solid #000',
+	border:'solid 1px rgba(91,208,236,1) ',
 	boxShadow: 24,
 	p: 4,
-	padding: '70px',
-	borderRadius: '45px'
+	
+	borderRadius: '5px'
 
 };
 
@@ -141,8 +141,9 @@ return(
 </Snackbar>
     <Modal open={selectDevOpen} onClose={handleSelectDevClose} aria-labelledby="modal-modal-selectClient"
     aria-describedby="modal-modal-description" >
-    <Box component='form' sx={formStyles}   >
-        <Stack direction={'row'}  >
+    <Box component='form' sx={formStyles}  padding={'30px'} >
+		<Stack  direction={'column'}>
+        <Stack direction={'row'}  sx={{justifyContent:'space-between', textAlign:'center', alignContent:'center',}}>
             <Select
                 labelId="client-select-label"
                 value={selectedDev}
@@ -159,16 +160,17 @@ return(
                 }
 
             </Select>
-            <Button sx={{ backgroundColor: '#6C63FF' }} onClick={handleClientModalOpen}   >  <AddIcon />  </Button>
-
+            <Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: 'inherit' ,marginLeft:'15px' }} onClick={handleClientModalOpen}   >  <AddIcon />  </Button>
+			
         </Stack>
-        <Button sx={{ backgroundColor: '#6C63FF' }} onClick={handleProjectDev} >Valider</Button>
-
+        <Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: 'inherit', marginTop:'30px' }} onClick={handleProjectDev} >Valider</Button>
+		</Stack>
         <Modal open={clientModalOpen} onClose={handleClientModalClose} aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description">
-            <Box component="form" onSubmit={clientFormik.handleSubmit} sx={formStyles}>
+            <Box component="form" onSubmit={clientFormik.handleSubmit} sx={formStyles} padding ={'100px'}>
+				<Stack direction={'column'} >
                 <TextField
-                    fullWidth
+                    
                     id="username"
                     name="username"
                     label="Username"
@@ -179,7 +181,7 @@ return(
                     sx={{ marginTop: '30px' }}
                 />
                 <TextField
-                    fullWidth
+                
                     id="email"
                     name="email"
                     label="Email"
@@ -190,7 +192,7 @@ return(
                     sx={{ marginTop: '30px' }}
                 />
                 <TextField
-                    fullWidth
+                    
                     id="roleName"
                     name="roleName"
                     label="Role"
@@ -204,6 +206,7 @@ return(
                 <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
                     Submit
                 </Button>
+				</Stack>
             </Box>
         </Modal>
     </Box>

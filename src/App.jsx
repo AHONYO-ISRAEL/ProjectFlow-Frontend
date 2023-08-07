@@ -15,7 +15,7 @@ import Developer  from './routes/Developer'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-const darkTheme = createTheme({
+const lightTheme = createTheme({
   palette: {
     mode: 'light',
   },
@@ -50,7 +50,7 @@ function App() {
 
   return (
     <>
-    <ThemeProvider theme={darkTheme}   >
+    <ThemeProvider theme={lightTheme}   >
       <CssBaseline/>
 <Public/>
    <Admin/>

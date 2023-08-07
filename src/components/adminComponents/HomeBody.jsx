@@ -1,22 +1,23 @@
-import * as React from 'react';
+import   {useState, forwardRef}from 'react';
 import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
-import PropTypes from 'prop-types';
-import {Paper,Stack,TextField,Typography,  Modal,Box,Snackbar} from '@mui/material';
+import { Paper, TextField, Typography, Modal, Box, Snackbar, Grid, } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
+import { useNavigate } from "react-router-dom";
 
 
 import Projects from '../Projects'
 
 
 import AddIcon from '@mui/icons-material/Add';
+import DashboardBody from './DashboardBody';
 
 // Rest of your code...
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -44,16 +45,16 @@ const formStyles = {
 };
 
 
-const HomeBody = ({ child }) => {
+const HomeBody = () => {
+const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+const [newProjectId, setNewProjectId]=  useState()
 
-  const [loading, setLoading] = React.useState(false);
+  const [errorMessage, setErrorMessage] = useState('')
+  const [severity, setSeverity] = useState('')
 
 
-  const [errorMessage, setErrorMessage] = React.useState('')
-  const [severity, setSeverity] = React.useState('')
-
-
-  const [snackState, setSnackState] = React.useState({
+  const [snackState, setSnackState] = useState({
     snackOpen: false,
     vertical: 'top',
     horizontal: 'center',
@@ -65,20 +66,20 @@ const HomeBody = ({ child }) => {
   };
 
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const userInfo = useSelector((state) => state.auth)
-/* eslint-disable no-unused-vars */
+  /* eslint-disable no-unused-vars */
   const InProgress = useSelector((state) => state.project);
-const auth  = useSelector((state)=>state.auth)
-console.log(auth.userId)
+  const auth = useSelector((state) => state.auth)
+  console.log(auth.userId)
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
-      userId:auth.userId,
+      userId: auth.userId,
       accessToken: userInfo.accessToken,
       refreshToken: userInfo.refreshToken
     },
@@ -86,25 +87,28 @@ console.log(auth.userId)
 
     onSubmit: async (values) => {
 
-     try {
-      setLoading(true)
-      const response = await axios.post('http://localhost:3000/api/admin/project/add', values)
+      try {
+        setLoading(true)
+        const response = await axios.post('http://localhost:3000/api/admin/project/add', values)
 
-      if (response.status === 200) {
-        setLoading(false)
-        setErrorMessage('Project created successfully')
-        setSeverity('success')
-        setSnackState({...snackState,  snackOpen : true})
-        console.log(response)
-    
+        if (response.status === 200) {
+          setLoading(false)
+           setErrorMessage('Project created successfully')
+           setSeverity('success')
+           setSnackState({ ...snackState, snackOpen: true })
+           setNewProjectId(response.data.project.id)
+          navigate(`../project/${newProjectId}`)
+          console.log(response)
 
-      }}catch(error){
+
+        }
+      } catch (error) {
         const errorMessage = error.response?.data?.message || 'An error occurred';
-  setErrorMessage(errorMessage)
-        setSeverity('error')      
-        setSnackState({...snackState,  snackOpen : true})
+        setErrorMessage(errorMessage)
+        setSeverity('error')
+        setSnackState({ ...snackState, snackOpen: true })
         setLoading(false)
-   
+
       }
     },
   });
@@ -112,20 +116,30 @@ console.log(auth.userId)
 
   return (
     <>
-      <Stack spacing={2} direction="row">
-        <Paper sx={{ width: '60vw', padding: '50px',  }}   >
-          {child}
-        </Paper>
-        <Paper sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', textAlign: 'center', width: '30vw', padding: '50px', backgroundColor: '#6C63FF' }}>
-          <AddIcon sx={{ fontSize: 100, marginRight: '10px', cursor: 'pointer' }} onClick={handleOpen} />
-          <Typography variant="h6">Ajouter un nouveau projet</Typography>
-        </Paper>
-      </Stack>
-      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose}  anchorOrigin={{ vertical, horizontal }} >
+
+      <Grid spacing={2} container sx={{ marginBottom: '30px' }}>
+        <Grid item xs={8}>
+          <Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)',  padding: '35px', borderRadius: '5px', boxShadow:'0px 1px 2px gray' }} >
+
+              {<Typography variant={'h3'}>Welcome {userInfo.userName} </Typography>}
+            </Box>
+        </Grid>
+
+          <Grid item xs={4}>
+
+            <Paper sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', textAlign: 'center'}}>
+              <AddIcon sx={{ fontSize: 80, cursor: 'pointer' }} onClick={handleOpen} />
+              <Typography variant="h6">Ajouter un nouveau projet</Typography>
+            </Paper>
+          </Grid>
+      </Grid>
+
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical, horizontal }} >
         <Alert onClose={handleSnackClose} severity={severity} sx={{ width: '100%' }}>
-    {errorMessage}
+          {errorMessage}
         </Alert>
       </Snackbar>
+      <DashboardBody />
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={formStyles}  >
@@ -157,7 +171,7 @@ console.log(auth.userId)
             />
 
             <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
-            loading = {loading}
+              loading={loading}
             >
               Register Project
             </LoadingButton>
@@ -166,12 +180,10 @@ console.log(auth.userId)
 
       </Modal>
       <Typography variant='h3' sx={{ marginTop: '50px' }} >Projet en cours</Typography>
-      <Projects/>
+      <Projects />
     </>
   )
 }
 
-HomeBody.propTypes = {
-  child: PropTypes.node
-}
+
 export default HomeBody
