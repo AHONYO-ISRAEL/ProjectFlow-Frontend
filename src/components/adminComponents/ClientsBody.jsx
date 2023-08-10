@@ -25,7 +25,7 @@ useEffect(()=>{
 
   return (
     <>
-            <Button  onClick={handleOpen} >Ajouter un nouveau client</Button>
+            <Button  onClick={handleOpen}  sx={{width: '100%'}}  >Ajouter un nouveau client</Button>
    <TableContainer  component={Paper}   >
     <Table>
       <TableHead>

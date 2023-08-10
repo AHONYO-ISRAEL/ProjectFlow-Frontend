@@ -49,7 +49,7 @@ const SectionAccordion = ({ Data ,}) => {
         boxShadow: 24,
         p: 4,
         padding: '70px',
-        borderRadius: '15px'
+        borderRadius: '5px'
 
     };
 
@@ -86,8 +86,8 @@ const [taskId, setTaskId] = useState()
             taskName: '',
             description: '',
             startDate: '',
-            durationDays: 2,
-            durationHours: 0,
+            durationDays: 0,
+            durationHours: 2,
             endDate: '',
             projectId: projectId,
             userId: userInfo.userId,
@@ -98,7 +98,7 @@ const [taskId, setTaskId] = useState()
         },
         validationSchema: taskValidationSchema,
 
-        onSubmit: async (values) => {
+        onSubmit: async (values, {resetForm}) => {
 
             try {
                 setLoading(true)
@@ -110,6 +110,7 @@ const [taskId, setTaskId] = useState()
                     setSeverity('success')
                     setSnackState({ ...snackState, snackOpen: true })
                     setTaskId(response.data.task.id)
+                    resetForm()
                     setTaskModalOpen(false);
                     handleSelectDevOpen()
                 }
@@ -131,7 +132,6 @@ const [taskId, setTaskId] = useState()
             const taskResponse = await axios.get(`http://localhost:3000/api/admin/section/${Data.id}/tasks/dev`)
             if(taskResponse.status === 200){
                 setTasksWithDevs(taskResponse.data)
-                console.log(taskResponse.data)
             }
     }catch(error){
         console.log(error)
@@ -149,8 +149,8 @@ useEffect(()=>{
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            <div style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{ width: '80vw', marginTop: '50px', maxHeight: '70vh', 
+            <div style={{ position: 'sticky', top: 0, zIndex: 1 ,  }}>
+            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{marginTop: '50px', maxHeight: '70vh', 
                     overflowY: 'auto',}}    >
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -265,7 +265,7 @@ useEffect(()=>{
                             sx={{ marginTop: '30px' }}
                             loading={loading}
                         >
-                            Register Project
+                            Ajouter
                         </LoadingButton>
                     </form>
                 </Box>

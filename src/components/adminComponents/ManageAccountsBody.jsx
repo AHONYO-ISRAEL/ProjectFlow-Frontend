@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
-import LoadingButton from '@mui/lab/LoadingButton'; // Step 1: Import the LoadingButton component
+import LoadingButton from '@mui/lab/LoadingButton'; 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,7 +31,7 @@ const ManageAccountsBody = ({ open, handleClose, role }) => {
   const userInfo = useSelector((state) => state.auth);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [severity, setSeverity] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(false); // Step 2: Add isLoading state
+  const [isLoading, setIsLoading] = React.useState(false); 
   const [snackState, setSnackState] = React.useState({
     snackOpen: false,
     vertical: 'top',
@@ -57,12 +57,11 @@ const ManageAccountsBody = ({ open, handleClose, role }) => {
     email: yup.string().email('Invalid email address').required('Required'),
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values, {resetForm}) => {
     try {
-      setIsLoading(true); // Step 3: Set isLoading to true on form submission
+      setIsLoading(true); 
       const response = await axios.post('http://localhost:3000/api/auth/signup', values);
-      setIsLoading(false); // Step 4: Set isLoading to false on successful form submission
-
+      setIsLoading(false); 
       if (response.status === 401) {
         setErrorMessage('User already registered');
         setSeverity('error');
@@ -73,6 +72,8 @@ const ManageAccountsBody = ({ open, handleClose, role }) => {
         );
         setSeverity('success');
         setSnackState({ ...snackState, snackOpen: true });
+        resetForm()
+        handleClose()
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'An error occurred';

@@ -1,25 +1,28 @@
-import {
-    Typography,
-    Box,
-    Grid,
-    Card,
-    CardContent,
-    Paper,
-    List,
-    ListItem,
-    IconButton,
-    ListItemText,
-    LinearProgress,
-  } from '@mui/material';
+import {Typography,Box,Grid,Card,CardContent,Paper,List,ListItem,IconButton,ListItemText,LinearProgress,Button} from '@mui/material';
   import { useSelector } from 'react-redux';
   import { useEffect, useState } from 'react';
   import axios from 'axios';
   import { MoreVert , NavigateNext, NavigateBefore,} from '@mui/icons-material';
   import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
+import CreateIcon from '@mui/icons-material/Create';
+import PubModal from '../../PubModal';
+
+
+
   const HomeBody = () => {
     const userInfo = useSelector((state) => state.auth);
     const [clientProjects, setClientProjects] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
+
+const [currentProject, setCurrentProject]  =  useState()
+useEffect(() => {
+  setCurrentProject(clientProjects[activeIndex]?.id);
+}, [activeIndex, clientProjects]);
+
+  const [isOpened, setIsOpened] = useState(false);
+
+  const handleOpen = () => setIsOpened(true);
+  const handleClose = () => setIsOpened(false);
 
     const getClientProjects = async () => {
       try {
@@ -195,7 +198,12 @@ import {
                 )}
               </Grid>
             </Grid>
+            <Button startIcon={<CreateIcon />} onClick={handleOpen}>
+        Envoyer un message
+      </Button>
+<PubModal  isOpened={isOpened}  handleClose={handleClose}  projectId={parseInt(currentProject)}  />
           </div>
+          
         ))}
       </>
     );

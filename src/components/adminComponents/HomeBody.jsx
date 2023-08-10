@@ -15,7 +15,6 @@ import Projects from '../Projects'
 import AddIcon from '@mui/icons-material/Add';
 import DashboardBody from './DashboardBody';
 
-// Rest of your code...
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -36,11 +35,10 @@ const formStyles = {
   transform: 'translate(-50%, -50%)',
   width: '25vw',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   padding: '30px',
-  borderRadius: '45px'
+  borderRadius: '5px'
 
 };
 
@@ -48,7 +46,6 @@ const formStyles = {
 const HomeBody = () => {
 const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
-const [newProjectId, setNewProjectId]=  useState()
 
   const [errorMessage, setErrorMessage] = useState('')
   const [severity, setSeverity] = useState('')
@@ -85,7 +82,7 @@ const [newProjectId, setNewProjectId]=  useState()
     },
     validationSchema: validationSchema,
 
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
 
       try {
         setLoading(true)
@@ -93,14 +90,13 @@ const [newProjectId, setNewProjectId]=  useState()
 
         if (response.status === 200) {
           setLoading(false)
-           setErrorMessage('Project created successfully')
+           setErrorMessage('Project created successfully')  
            setSeverity('success')
            setSnackState({ ...snackState, snackOpen: true })
-           setNewProjectId(response.data.project.id)
-          navigate(`../project/${newProjectId}`)
-          console.log(response)
+           navigate(`../project/${response.data.project.id}`)
 
-
+          resetForm()
+          handleClose()
         }
       } catch (error) {
         const errorMessage = error.response?.data?.message || 'An error occurred';
@@ -110,6 +106,7 @@ const [newProjectId, setNewProjectId]=  useState()
         setLoading(false)
 
       }
+
     },
   });
 
@@ -146,7 +143,7 @@ const [newProjectId, setNewProjectId]=  useState()
           <form onSubmit={formik.handleSubmit}  >
             <TextField
               label="Project Title"
-              variant="standard"
+              variant="outlined"
               id="name"
               name="name"
               value={formik.values.name}
@@ -157,7 +154,6 @@ const [newProjectId, setNewProjectId]=  useState()
             />
             <TextField
               label="Description"
-              variant="standard"
               id="description"
               name="description"
               multiline

@@ -65,7 +65,6 @@ const SelectDevModal = ({handleSelectDevClose,selectDevOpen })=>{
 		}
 	}
 
-console.log(devData)
 	useEffect(() => {
 		getDevs()
 	}, [])
@@ -84,7 +83,7 @@ console.log(devData)
 		email: yup.string().email('Invalid email address').required('Required'),
 		roleName: yup.string().oneOf(['Developer']).required('Role is required'),
 	});
-	const onSubmit = async (values) => {
+	const onSubmit = async (values, {resetForm}) => {
 		try {
 			const response = await axios.post('http://localhost:3000/api/auth/signup', values)
 			if (response.status === 401) {
@@ -96,6 +95,8 @@ console.log(devData)
 				setErrorMessage(values.roleName + `   ` + values.username + `'s ` + `  account created successfully`)
 				setSeverity('success')
 				setSnackState({ ...snackState, snackOpen: true })
+				resetForm()
+				handleSelectDevClose()
 			}
 			getDevs()
 
@@ -105,7 +106,6 @@ console.log(devData)
 			setSeverity('error')
 			setSnackState({ ...snackState, snackOpen: true })
 		}
-		console.log(values);
 	};
 
 	const clientFormik = useFormik({
@@ -119,9 +119,11 @@ console.log(devData)
 
 			const response2 = axios.post(`http://localhost:3000/api/admin/project/assign/dev`, { userId: selectedDev, projectId:projectId })
 			if (response2.status === 200) {
-				setErrorMessage('Client added successfully')
+				setErrorMessage('dev added successfully')
 				setSeverity('success')
 				setSnackState({ ...snackState, snackOpen: true })
+	
+				handleSelectDevClose()
 			}
 		} catch (error) {
 			console.log(error)

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { accessTokenUpdate } from './features/auth/authSlice'
+// import { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import axios from 'axios';
+// import { accessTokenUpdate } from './features/auth/authSlice'
 
 
 import Admin  from './routes/Admin'
@@ -23,9 +23,10 @@ const lightTheme = createTheme({
 
 
 function App() {
-  const userInfo = useSelector((state)=>state.auth)
+  //const userInfo = useSelector((state)=>state.auth)
 
-  const dispatch = useDispatch()
+  //const dispatch = useDispatch()
+  /*
   useEffect(()=>{
     axios
     .post('http://localhost:3000/api/auth/refreshAccessToken',  {refreshToken: userInfo.refreshToken , accessToken : userInfo.accessToken} )
@@ -45,7 +46,7 @@ function App() {
     })
     
   },  [dispatch, userInfo.refreshToken,userInfo.accessToken] )
-
+*/
 
 
   return (

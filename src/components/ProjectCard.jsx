@@ -20,7 +20,6 @@ const [projectDevsData, setProjectDevsData] = useState([])
       const devResponse = await axios.get(`http://localhost:3000/api/admin/project/${project.id}/dev`)
       if(devResponse.status===200){
         setProjectDevsData(devResponse.data.projects.developers)
-        console.log(devResponse.data.projects.developers)
 
       }
     } catch (error) {

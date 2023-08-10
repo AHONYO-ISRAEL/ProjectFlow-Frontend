@@ -1,6 +1,5 @@
-import { Avatar,  } from '@mui/material';
-import PropTypes from 'prop-types';
-
+import {Avatar} from '@mui/material'
+import  PropTypes from 'prop-types'
 
 function stringToColor(string) {
     let hash = 0;
@@ -15,7 +14,7 @@ function stringToColor(string) {
     }
     return color;
   }
-
+  
   function stringAvatar(name) {
     const initials = name.trim().split(' ').map(word => word[0].toUpperCase()).join('');
   
@@ -28,20 +27,18 @@ function stringToColor(string) {
     };
   }
 
-const Avatars = ({Data})=>{
-    return(
 
- 
-        
-          Data?.map((dev)=>(<Avatar key={dev.id}     {...stringAvatar(dev.user.username)} />))
-        
+const UserAvatar = ({data})=>{
+return(
+    <>
+           <Avatar     {...stringAvatar(data)} />
 
-    )
-
+    </>
+)
 }
 
-Avatars.propTypes={
-    Data : PropTypes.object,
+UserAvatar.propTypes ={
+    data: PropTypes.string,
 }
 
-export default Avatars
+export default UserAvatar

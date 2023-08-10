@@ -17,7 +17,6 @@ const [progressData, setProgressData] = useState([])
   const getProgressProjects = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/admin/project/progress/get');
-      console.log(response.data);
       dispatch(resetProgressProjects());
       dispatch(getInProgress(response.data.projects)); // Dispatch the 'getInProgress' action to update the Redux state
       setProgressData(response.data.projects)

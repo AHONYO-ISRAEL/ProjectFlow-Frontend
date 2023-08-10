@@ -38,8 +38,6 @@ const StartTask = ({ devId, startTaskOpen, handleStartTaskClose }) => {
 
         }
       setLoading(false);
-
-      // Close the modal after successful submission
       handleStartTaskClose();
     } catch (error) {
       setLoading(false);

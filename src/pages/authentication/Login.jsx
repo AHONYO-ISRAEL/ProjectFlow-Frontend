@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Button, TextField, Typography, Paper, Box , Snackbar } from '@mui/material';
+import { Button, TextField, Typography, Paper, Box, Snackbar } from '@mui/material';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginSuccess } from '../../features/auth/authSlice'
@@ -31,9 +31,9 @@ const Login = () => {
 
 
 
-const dispatch = useDispatch()
-const userInfo = useSelector((state)=>state.auth)
-console.log(userInfo)
+  const dispatch = useDispatch()
+  const userInfo = useSelector((state) => state.auth)
+  console.log(userInfo)
 
 
   const initialValues = {
@@ -46,33 +46,33 @@ console.log(userInfo)
     password: Yup.string()
       .min(3, 'Password must be at least 3 characters')
       .required('Password is required'),
-    
+
   });
 
-  const handleSubmit = async  (values, { setSubmitting }) => {
-   // const baseUrl = 'http://localhost:3000/api'
+  const handleSubmit = async (values, { setSubmitting }) => {
+    // const baseUrl = 'http://localhost:3000/api'
 
-try{
-  const response = await axios.post('http://localhost:3000/api/auth/login', values)
-  if(response.status === 200){
-    dispatch(loginSuccess(response.data))
-    const link  =  userInfo.role + '/Home'
-    console.log(link)
-     setErrorMessage('Success')
- setSeverity('success')
- setSnackState({...snackState,  open : true})
-      navigate(response.data.role+'/Home')
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/login', values)
+      if (response.status === 200) {
+        dispatch(loginSuccess(response.data))
+        const link = userInfo.role + '/Home'
+        console.log(link)
+        setErrorMessage('Success')
+        setSeverity('success')
+        setSnackState({ ...snackState, open: true })
+        navigate(response.data.role + '/Home')
 
 
-}
-}catch(error){
-  const errorMessage = error.response?.data?.message || 'An error occurred';
-  setErrorMessage(errorMessage)
-  setSeverity('error')
-setSnackState({...snackState,  open : true})
-}finally{
-  setSubmitting(false)
-}
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'An error occurred';
+      setErrorMessage(errorMessage)
+      setSeverity('error')
+      setSnackState({ ...snackState, open: true })
+    } finally {
+      setSubmitting(false)
+    }
   };
 
   const handleClose = () => {
@@ -96,9 +96,9 @@ setSnackState({...snackState,  open : true})
 
   return (
     < >
-      <Paper elevation={3} style={paperStyles}  className ='register-container'     >
+      <Paper elevation={3} style={paperStyles} className='register-container'     >
         <div>
-          <Typography variant="h4"    className= 'title' >Login</Typography>
+          <Typography variant="h4" className='title' >S&apos;enregistrer</Typography>
 
           <Formik
             initialValues={initialValues}
@@ -134,7 +134,7 @@ setSnackState({...snackState,  open : true})
                     />
                   </div>
                   <div>
-        
+
                   </div>
                   <Button
                     type="submit"
@@ -142,13 +142,13 @@ setSnackState({...snackState,  open : true})
                     color="primary"
                     disabled={isSubmitting}
                   >
-Login
-                  </Button>
-                  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}  anchorOrigin={{ vertical, horizontal }} >
-        <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
-    {errorMessage}
-        </Alert>
-      </Snackbar>
+                    S&apos;enregistrer              
+                        </Button>
+                  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }} >
+                    <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                      {errorMessage}
+                    </Alert>
+                  </Snackbar>
                 </Box>
               </Form>
             )}

@@ -1,20 +1,21 @@
 import axios from "axios"
 import { useEffect, useState, forwardRef } from "react";
 import { useParams } from "react-router-dom"
-import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid, AvatarGroup } from '@mui/material'
+import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid, AvatarGroup, Tabs, Tab, CardHeader } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
 import AddIcon from '@mui/icons-material/Add';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSelector, } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid'
-import AssignmentIcon from '@mui/icons-material/Assignment';
-
+//import AssignmentIcon from '@mui/icons-material/Assignment';
+import { DateTime } from 'luxon';
 
 import SectionModal from './adminModals/SectionModal'
 import SelectDevModal from './adminModals/SelectDevModal'
 import SectionAccordion from '../SectionAccordion'
 import Avatars from "../Avatars";
+import ProjectPublications from "../ProjectPublications";
 
 const Alert = forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -38,6 +39,22 @@ const formStyles = {
 
 const SelectedProject = () => {
 	const { projectId } = useParams()
+
+	const [pubData, setPubData] = useState([])
+
+	const getProjectPubs = async () => {
+		try {
+			const pubResponse = await axios.get(`http://localhost:3000/api/project/${projectId}/publications/get`)
+			if (pubResponse.status === 200) {
+				setPubData(pubResponse.data.publications)
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+	useEffect(() => {
+		getProjectPubs()
+	})
 
 
 	const [errorMessage, setErrorMessage] = useState('')
@@ -93,7 +110,6 @@ const SelectedProject = () => {
 			setSeverity('error')
 			setSnackState({ ...snackState, snackOpen: true })
 		}
-		console.log(values);
 	};
 
 	const clientFormik = useFormik({
@@ -196,12 +212,11 @@ const SelectedProject = () => {
 			console.log(error)
 		}
 	}
-
+	console.log(sectionData)
 	useEffect(() => {
 		getProjectSections()
-	}, [])
+	})
 
-	console.log(sectionData)
 
 
 	const [projectDevsData, setProjectDevsData] = useState([])
@@ -211,7 +226,6 @@ const SelectedProject = () => {
 			const devResponse = await axios.get(`http://localhost:3000/api/admin/project/${projectId}/dev`)
 			if (devResponse.status === 200) {
 				setProjectDevsData(devResponse.data.projects.developers)
-				console.log(devResponse.data.projects.developers)
 
 
 			}
@@ -225,6 +239,40 @@ const SelectedProject = () => {
 	})
 
 
+	const changeStatus = async () => {
+		try {
+			const currentDate = DateTime.now()
+			if (projectData.startDate >= currentDate) {
+				const statusResponse = await axios.post(`http://localhost:3000/api/admin/project/${projectData.id}`)
+				if (statusResponse.status === 200) {
+					console.log(statusResponse)
+				}
+			}
+		} catch (error) {
+			console.log(error)
+		}
+
+	}
+
+	useEffect(() => {
+		changeStatus()
+	})
+	const [activeTab, setActiveTab] = useState(0);
+
+	const handleTabChange = (event, newValue) => {
+		setActiveTab(newValue);
+	};
+	/*
+		const calculateTotalTasks = () => {
+			return sectionData.reduce((total, section) => total + section.tasks.length, 0);
+		}*/
+	// const [totalTasks, setTotalTasks] = useState()
+	/*
+		useEffect(() => {
+			const totalTasks = calculateTotalTasks(sectionData);
+			setTotalTasks(totalTasks); // Assuming you have a state variable to store the total tasks
+		}, [sectionData]);
+	*/
 
 	if (loading) {
 		return <h1>Loading</h1>
@@ -235,22 +283,72 @@ const SelectedProject = () => {
 					{errorMessage}
 				</Alert>
 			</Snackbar>
-			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px',  boxShadow:'0px 1px 2px gray'}} >
+			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px', boxShadow: '0px 1px 2px gray' }} >
 				<Grid container spacing={2}>
-					<Grid item xs={8} >
-						<Typography variant="h3"  sx={{color:'#fff'}} >   Project /  {projectData.name}   </Typography>
-						<Typography variant='p' sx={{color:'#fff'}}  > {projectData.description}  </Typography>
+					<Grid item xs={8} sx={{ marginBottom: '20px' }} >
+						<Typography variant="h3" sx={{ color: '#fff' }} >   Project /  {projectData.name}   </Typography>
+						<Typography variant='p' sx={{ color: '#fff' }}  > {projectData.description}  </Typography>
 					</Grid>
 					<Grid item xs={4}>
-						<Stack direction={'column'} sx={{ textAlign: 'center' }}  >
-							{projectData.startDate === null ? <Button sx={{backgroundColor: '  rgba(91,208,236,1)', marginTop: '50px', color:'white'}} >Ajouter la date de debut</Button> : <Typography variant='h5'>From :  {projectData.startDate.substring(0, 10)}   </Typography>}
-							{projectData.endDate === null ? <Button  sx={{backgroundColor: '  rgba(91,208,236,1)', marginTop: '50px', color:'white' }} >Ajouter la date de fin</Button> : <Typography variant='h3'>From :  {projectData.endDate.substring(0, 10)}   </Typography>}
+						<Stack direction={'column'} sx={{ alignItems: 'end', alignContent: 'flex-end', marginTop: '-15px' }}>
+
+							<Button sx={{
+								backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', marginLeft: '18px', textTransform: 'none', transition: 'transform 0.3s ease', // Add a transition effect for the transform property
+								'&:hover': {
+									backgroundColor: 'rgba(91, 208, 236, 1)',
+									transform: 'translateY(2px)',
+
+								},
+							}} onClick={handleSelectDevOpen}  >  <AddIcon /> Ajouter les developpeurs  </Button>
+							<Button sx={{
+								backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', marginLeft: '18px', textTransform: 'none', transition: 'transform 0.3s ease', // Add a transition effect for the transform property
+								'&:hover': {
+									backgroundColor: 'rgba(91, 208, 236, 1)',
+									transform: 'translateY(2px)',
+
+								},
+								marginTop: '10px'
+							}} onClick={handleSectionModalOpen} >Ajouter une nouvelle section </Button>
 						</Stack>
 					</Grid>
-				</Grid>
+					<Grid item xs={2} sx={{ padding: '5px', border: 'solid 1px #fff', borderRadius: '5px', }} >
+						<Stack direction={'column'}>
+							{projectData.endDate === null ? <Button sx={{ backgroundColor: '  rgba(91,208,236,1)', color: 'white', border: 'solid 1px white', }} >Ajouter la date de fin</Button> : <Typography variant='h5' sx={{ color: '#fff' }}>{projectData.endDate.substring(0, 10)}   </Typography>}
+							<Typography variant='h7' sx={{ color: 'gray' }} >Date de fin</Typography>
+						</Stack>
+					</Grid>
+					<Grid items xs={6} >
+						<Stack direction={'row'} sx={{ alignItems: 'end', alignContent: 'flex-end' }}>
 
+
+							{projectData.clientId === null ?
+								<Button variant="contained" color="primary" sx={{ marginTop: '50px' }} onClick={handleSelectClientOpen} >Ajouter le client </Button> : (
+									<Stack direction={'column'} sx={{ padding: '5px', border: 'solid 1px #fff', borderRadius: '5px', marginLeft: '10px' }} >
+										<Typography variant='h5' sx={{ color: 'white', }}> {clientName}  </Typography>
+										<Typography variant='h7' sx={{ color: 'gray', padding: '5px', }}> Client  </Typography>
+
+									</Stack>)
+							}
+							<AvatarGroup sx={{ marginLeft: '15px', }}  >
+								<Avatars Data={projectDevsData} />
+							</AvatarGroup>
+						</Stack>
+
+					</Grid>
+					<Grid item xs={2}>
+
+
+
+					</Grid>
+				</Grid>
+				<Box sx={{ borderTop: 1, borderColor: 'divider', marginTop: '30px' }}>
+					<Tabs value={activeTab} onChange={handleTabChange}  >
+						<Tab label="Vue d'ensemble" />
+						<Tab label="Sections" />
+					</Tabs>
+				</Box  >
 			</Box>
-			<Grid container spacing={2} marginTop={'15px'} >
+			{/* <Grid container spacing={2} marginTop={'15px'} >
 
 				<Grid item xs={4}>
 					<Card sx={{ height: '180px', }}>
@@ -284,18 +382,16 @@ const SelectedProject = () => {
 					>
 						<CardContent sx={{ textAlign: 'center' }}>
 
-							<Stack direction={'column'}   sx={{textAlign:'center', alignItems:'center'}}>
+							<Stack direction={'column'} sx={{ textAlign: 'center', alignItems: 'center' }}>
 								<AssignmentIcon sx={{ fontSize: 80, cursor: 'pointer' }} />
-								<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', marginTop:'18px' }}  >Ajouter une nouvelle section </Button>
+								<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', marginTop: '18px' }}  >Ajouter une nouvelle section </Button>
 
 							</Stack>
 						</CardContent>
 					</Card>
 				</Grid>
-			</Grid>
+			</Grid> */}
 			<Stack direction={'row'} sx={{ justifyContent: 'spaceBetween', alignItems: 'center', alignContentCenter: 'center' }}>
-
-
 
 				<SelectDevModal selectDevOpen={selectDevOpen} handleSelectDevClose={handleSelectDevClose} />
 
@@ -322,7 +418,7 @@ const SelectedProject = () => {
 							</Select>
 							<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }} onClick={handleClientModalOpen}   >  <AddIcon />  </Button>
 						</Stack>
-						<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }}  onClick={handleClientUpdate} >Valider</Button>
+						<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }} onClick={handleClientUpdate} >Valider</Button>
 
 						<Modal open={clientModalOpen} onClose={handleClientModalClose} aria-labelledby="modal-modal-title"
 							aria-describedby="modal-modal-description">
@@ -361,7 +457,7 @@ const SelectedProject = () => {
 									sx={{ marginTop: '30px' }}
 								>
 								</TextField>
-								<Button type="submit" variant="contained" sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff',  mt: 2 }} >
+								<Button type="submit" variant="contained" sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', mt: 2 }} >
 									Submit
 								</Button>
 							</Box>
@@ -370,14 +466,50 @@ const SelectedProject = () => {
 				</Modal>
 			</Stack>
 
-			<Box sx={{ flexGrow: 1, display: 'flex', width: '80vw', marginTop: '50px'}}   >
+			<Box sx={{ flexGrow: 1, width: '80vw', display: activeTab === 1 ? 'block' : 'none', marginTop: '20px' }}   >
+
 				<Grid container >
 					{
 						sectionData?.map((section) => (
-							<SectionAccordion key={section.id} Data={section} />
+							<Grid key={section.id} item xs={12}>
+								<SectionAccordion Data={section} />
+							</Grid>
 						))
 					}
 				</Grid>
+			</Box>
+			<Box sx={{ display: activeTab === 0 ? 'block' : 'none', marginTop: '20px' }}>
+				<Stack direction={'row'} sx={{ width: '100%' }}>
+					<Stack direction={'column'}>
+
+						<Card sx={{ height: '180px', width: '50vw', marginBottom: '20px', marginRight: '20px' }}>
+							<CardContent>
+								<Grid container spacing={2}>
+									<Grid item xs={4} >
+										<Typography variant="h3">{sectionData.length}</Typography>
+									</Grid>
+								</Grid>
+							</CardContent>
+						</Card>
+						{
+							pubData?.length > 0 ? (
+								<ProjectPublications pubData={pubData} />
+							) : (
+								<Typography>Aucune publication </Typography>
+							)
+						}
+					</Stack>
+
+
+					<Card sx={{ height: '360px', width: '30vw' }}>
+						<CardHeader title={'Fichiers du projet'} />
+						<CardContent>
+
+						</CardContent>
+					</Card>
+
+
+				</Stack>
 			</Box>
 		</>
 		)
