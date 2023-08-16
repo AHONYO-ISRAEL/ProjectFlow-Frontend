@@ -9,9 +9,10 @@ const ProjectsBody = () => {
   const [projectDevsData, setProjectDevsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const userId = parseInt(userInfo.userId)
   const getProjectDevs = async () => {
     try {
-      const devResponse = await axios.get(`http://localhost:3000/api/dev/${userInfo.userId}/projects/get`);
+      const devResponse = await axios.get(`http://localhost:3000/api/dev/${userId}/projects/get`);
       if (devResponse.status === 200) {
         setProjectDevsData(devResponse.data.projects);
         setLoading(false); 

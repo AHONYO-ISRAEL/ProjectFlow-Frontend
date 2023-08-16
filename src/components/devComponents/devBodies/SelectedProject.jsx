@@ -1,12 +1,12 @@
 import axios from "axios"
 import { useParams } from "react-router-dom"
 import { useEffect, useState, } from "react";
-import { Box, Typography, Grid , Card, CardContent, Stack, } from '@mui/material'
+import { Box, Typography, Grid , Card, CardContent, Stack,Tabs, Tab } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info';
 import ProjectInfo from "../devModals/ProjectInfo";
 import TaskBoard from "../TaskBoard";
 import { useSelector } from "react-redux";
-
+import ProjectPublications from "../../ProjectPublications";
 
 const SelectedProject = () => {
     const { projectId } = useParams()
@@ -37,6 +37,27 @@ const [projectInfoOpen , setProjectInfoOpen] = useState(false)
 const  handleProjectInfoOpen = ()=> setProjectInfoOpen(true)
 const  handleProjectInfoClose = ()=> setProjectInfoOpen(false)
 
+const [activeTab, setActiveTab] = useState(0);
+
+const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+};
+
+const [pubData, setPubData] = useState([])
+
+const getProjectPubs = async () => {
+    try {
+        const pubResponse = await axios.get(`http://localhost:3000/api/project/${projectId}/publications/get`)
+        if (pubResponse.status === 200) {
+            setPubData(pubResponse.data.publications)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+useEffect(() => {
+    getProjectPubs()
+})
     return (
         <>
             <Grid container  spacing={2}  sx={{marginBottom:'30px'}} >
@@ -45,6 +66,12 @@ const  handleProjectInfoClose = ()=> setProjectInfoOpen(false)
                         <Typography variant="h3" >    {projectData.name}   </Typography>
                         <Typography variant='p' > {projectData.description}  </Typography>
                     </Box>
+                    <Box sx={{ borderTop: 1, borderColor: 'divider', marginTop: '30px' }}>
+					<Tabs value={activeTab} onChange={handleTabChange}  >
+						<Tab label="Vue d'ensemble" />
+						<Tab label="Sections" />
+					</Tabs>
+				</Box  >
                 </Grid>
                 <Grid item xs={4} >
 				<Card sx={{ Width: 400, display: 'flex', textAlign: 'center' }} onClick={handleProjectInfoOpen} >  
@@ -59,7 +86,19 @@ const  handleProjectInfoClose = ()=> setProjectInfoOpen(false)
 				</Card>
                 </Grid>
             </Grid>
-            <TaskBoard  userId={userInfo.userId}   projectId={ parseInt(projectId)  } sx={{marginTop:'30px'}} />
+            <Box sx={{ flexGrow: 1, width: '80vw', display: activeTab === 1 ? 'block' : 'none', marginTop: '20px' }}  >
+            <TaskBoard  userId={userInfo.userId}   projectId={ parseInt(projectId)  }  sx={{marginTop:'30px'}}    />
+
+            </Box>
+            <Box sx={{ display: activeTab === 0 ? 'block' : 'none', marginTop: '20px' }}  >
+            {
+							pubData?.length > 0 ? (
+								<ProjectPublications pubData={pubData} />
+							) : (
+								<Typography>Aucune publication </Typography>
+							)
+						}
+            </Box>
             <ProjectInfo  projectInfoOpen={projectInfoOpen}  handleProjectInfoClose={handleProjectInfoClose} projectData={projectData}  clientName={clientName}  />
         </>
     )

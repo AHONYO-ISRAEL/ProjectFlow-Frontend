@@ -24,8 +24,10 @@ const Alert = forwardRef(function Alert(props, ref) {
 
 
 const validationSchema = yup.object({
-  name: yup.string().required('Project title is required'),
+  name: yup.string().required('Le titre du projet est requis'),
   description: yup.string().required('Description is required'),
+  startDate: yup.date().required('Required'),
+  endDate: yup.date().min(yup.ref('startDate'), 'End date must be after start date'),
 });
 
 const formStyles = {
@@ -76,6 +78,8 @@ const navigate = useNavigate()
     initialValues: {
       name: '',
       description: '',
+      startDate: '',
+      endDate: '',
       userId: auth.userId,
       accessToken: userInfo.accessToken,
       refreshToken: userInfo.refreshToken
@@ -142,6 +146,7 @@ const navigate = useNavigate()
         <Box sx={formStyles}  >
           <form onSubmit={formik.handleSubmit}  >
             <TextField
+            required
               label="Project Title"
               variant="outlined"
               id="name"
@@ -153,6 +158,7 @@ const navigate = useNavigate()
               fullWidth
             />
             <TextField
+            required
               label="Description"
               id="description"
               name="description"
@@ -165,7 +171,36 @@ const navigate = useNavigate()
               fullWidth
               sx={{ marginTop: '50px' }}
             />
-
+                        <TextField
+                            fullWidth
+                            id="startDate"
+                            name="startDate"
+                            label="Start Date"
+                            type="date"
+                            value={formik.values.startDate}
+                            onChange={formik.handleChange}
+                            error={formik.touched.startDate && Boolean(formik.errors.startDate)}
+                            helperText={formik.touched.startDate && formik.errors.startDate}
+                            sx={{ marginTop: '30px' }}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            id="endDate"
+                            name="endDate"
+                            label="End Date"
+                            type="date"
+                            value={formik.values.endDate}
+                            onChange={formik.handleChange}
+                            error={formik.touched.endDate && Boolean(formik.errors.endDate)}
+                            helperText={formik.touched.endDate && formik.errors.endDate}
+                            sx={{ marginTop: '30px' }}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
             <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
               loading={loading}
             >

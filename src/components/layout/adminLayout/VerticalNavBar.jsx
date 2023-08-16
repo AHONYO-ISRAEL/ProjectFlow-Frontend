@@ -15,6 +15,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import UserAvatar from '../../UserAvatar'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../../../features/auth/authSlice'
 
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
@@ -26,7 +29,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import { Link } from 'react-router-dom';
 import { AssignmentInd } from '@mui/icons-material';
-// import  Logos from  '../images/logo.png'
+import LogoutIcon from '@mui/icons-material/Logout';
 import Logos from '../../../images/logo.png'
 
 
@@ -72,7 +75,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const drawerWidth = 260;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+const Main = styled('main', 
+{ shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -118,47 +122,50 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const VerticalNavBar = ({ body}) => {
+const VerticalNavBar = ({ body},) => {
+  const userInfo = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+
+  const [isVisible, setIsVisible ] = useState(false)
 
 
+  const [open, setOpen] = useState(true);
 
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+    setIsVisible(!isVisible)
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
   };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{backgroundColor: '  rgba(91,208,236,2)', borderBottomLeftRadius:'5px',  borderBottomRightRadius:'5px'}}   >
-        <Toolbar  >
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Search   >
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: '#fff', borderBottomLeftRadius: '5px', borderBottomRightRadius: '5px', }}   >
+        <Toolbar   >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: isVisible ? 'space-between' : '', width: '100%' }} >
 
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon sx={{ color: '  #006DF4' }} />
+            </IconButton>
+            <img src={Logos} style={{ width: '15%', display: isVisible ? 'block' : 'none', }}></img>
+            <div style={{ marginLeft: isVisible ? '' : '70vw' , display:'flex', alignItems:'center'}}>
+              <UserAvatar data = {userInfo.userName} />
+
+            <IconButton  >
+              <LogoutIcon sx={{ color: '#1a1a1a', fontSize: '30px',}} onClick={() => {
+              dispatch(logout)
+              window.location.replace('/');
+            }} />
+            </IconButton>
+            </div>
+  
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -167,25 +174,26 @@ const VerticalNavBar = ({ body}) => {
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            // backgroundColor: '  rgba(91,208,236,2)',
+             backgroundColor: '  #006DF4',
             width: drawerWidth,
             boxSizing: 'border-box',
+            display: { xs: 'none', sm: 'block' },
           },
         }}
         variant="persistent"
-        anchor="left"
+                anchor="left"
         open={open}
       >
         <DrawerHeader sx={{backgroundColor:'#fff', borderBottomRightRadius:'5px'}} >
-    <img src={Logos}  style={{width:'80%'}}></img> 
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+    <img src={Logos}  style={{width:'80%' }}></img> 
+          <IconButton onClick={handleDrawerToggle}  >
+            {theme.direction === 'ltr' ? <ChevronLeftIcon   sx={{color: '  #006DF4',}} /> : <ChevronRightIcon    sx={{color: '  #006DF4',}} />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
           {[
-            { text: 'Accueil', icon: <DashboardIcon /> , link:'Home' },
+            { text: 'Tableau de bord', icon: <DashboardIcon /> , link:'Home' },
             { text: 'Projets', icon: <FolderIcon />,link:'Projects'  },
             { text: 'Collaboration', icon: <GroupsIcon /> , link:'Collaborate' },
             {text: 'Developpeurs',icon: <EngineeringIcon/>, link:'Developers'},
@@ -213,8 +221,6 @@ const VerticalNavBar = ({ body}) => {
 
 VerticalNavBar.propTypes = {
   body: PropTypes.node,
-
-
 }
 
 export default VerticalNavBar;

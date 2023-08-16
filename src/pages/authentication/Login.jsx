@@ -7,15 +7,44 @@ import { loginSuccess } from '../../features/auth/authSlice'
 import MuiAlert from '@mui/material/Alert';
 import * as React from 'react';
 import './auth-form.css'
-import { useNavigate } from "react-router-dom";
-//import  Logo 
+import Logos from '../../images/logo.png'
+import Whirl from '../../images/whirl.svg'
+import { styled } from '@mui/material/styles';
+
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+
+
+const StyledLoginContainer = styled('div')({
+
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'relative', // Add relative positioning
+  width: '100vw',
+  height: '100vh',
+  overflowY: 'hidden',
+  '::before': {
+    content: "''",
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `url(${Whirl})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    transform: 'rotate(-60deg)',
+    zIndex: -1,
+  },
+});
+
+
+
 const Login = () => {
 
-  const navigate = useNavigate()
 
   const [errorMessage, setErrorMessage] = React.useState('')
   const [severity, setSeverity] = React.useState('')
@@ -44,8 +73,8 @@ const Login = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
-      .min(3, 'Password must be at least 3 characters')
-      .required('Password is required'),
+      .min(3, 'Le mot de passe doit avoir au moins 3 caracteres')
+      .required('Le mot de passe est requis'),
 
   });
 
@@ -61,8 +90,7 @@ const Login = () => {
         setErrorMessage('Success')
         setSeverity('success')
         setSnackState({ ...snackState, open: true })
-        navigate(response.data.role + '/Home')
-
+        window.location.replace(response.data.role + '/Home')
 
       }
     } catch (error) {
@@ -96,65 +124,70 @@ const Login = () => {
 
   return (
     < >
-      <Paper elevation={3} style={paperStyles} className='register-container'     >
-        <div>
-          <Typography variant="h4" className='title' >S&apos;enregistrer</Typography>
+      <StyledLoginContainer>
+        <div   >
+          <img src={Logos} style={{ top: 0, left: 0, width: '15%', marginLeft: '30px ', marginTop: '20px' }}></img>
+          <Paper elevation={3} style={paperStyles} className='register-container' sx={{ position: 'relative' }} >
+            <div  >
+              <Typography variant="h4" className='title' sx={{ top: 0, marginTop: '50px', position: 'absolute', marginLeft: '15%' }}>Connexion</Typography>
 
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-            enableReinitialize={true}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <Box style={formContainerStyles}>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+                enableReinitialize={true}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <Box style={formContainerStyles}>
 
-                  <div>
-                    <Field
-                      as={TextField}
-                      name="email"
-                      label="Email"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      helperText={<ErrorMessage name="email" />}
-                    />
-                  </div>
-                  <div>
-                    <Field
-                      as={TextField}
-                      name="password"
-                      label="Password"
-                      type="password"
-                      variant="outlined"
-                      fullWidth
-                      margin="normal"
-                      helperText={<ErrorMessage name="password" />}
-                    />
-                  </div>
-                  <div>
+                      <div>
+                        <Field
+                          as={TextField}
+                          name="email"
+                          label="Email"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          helperText={<ErrorMessage name="email" />}
+                        />
+                      </div>
+                      <div>
+                        <Field
+                          as={TextField}
+                          name="password"
+                          label="Password"
+                          type="password"
+                          variant="outlined"
+                          fullWidth
+                          margin="normal"
+                          helperText={<ErrorMessage name="password" />}
+                        />
+                      </div>
+                      <div>
 
-                  </div>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                  >
-                    S&apos;enregistrer              
-                        </Button>
-                  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }} >
-                    <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
-                      {errorMessage}
-                    </Alert>
-                  </Snackbar>
-                </Box>
-              </Form>
-            )}
-          </Formik>
+                      </div>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={isSubmitting}
+                      >
+                        Se connecter
+                      </Button>
+                      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }} >
+                        <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                          {errorMessage}
+                        </Alert>
+                      </Snackbar>
+                    </Box>
+                  </Form>
+                )}
+              </Formik>
+            </div>
+          </Paper>
         </div>
-      </Paper>
+      </StyledLoginContainer>
     </>
   );
 };

@@ -105,6 +105,7 @@ return(
                 <Box sx={formStyles}  >
                     <form onSubmit={taskFormik.handleSubmit}>
                         <TextField
+                        required
                             label="Task title"
                             id="taskName"
                             name="taskName"

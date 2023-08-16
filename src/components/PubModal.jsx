@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 
-const PubModal = ({isOpened, handleClose, projectId})=>{
-    const userInfo = useSelector((state) => state.auth);
-    const userId = userInfo.userId;
+const PubModal = ({ isOpened, handleClose, projectId }) => {
+  const userInfo = useSelector((state) => state.auth);
+  const userId = userInfo.userId;
 
   const validationSchema = Yup.object({
     title: Yup.string().required('*Le titre est requis'),
@@ -19,24 +19,24 @@ const PubModal = ({isOpened, handleClose, projectId})=>{
   const initialValues = {
     title: '',
     content: '',
-    file: null,
-    fileLink: '', 
+    fileLink: '',
     projectId: projectId,
     userId: userId
   };
 
-
   const onSubmit = async (values) => {
     try {
-      const fileData = new FormData();
-      fileData.append('file', values.file);
-      const pubData = {
-        ...values,
-        userId: userId,
-        projectId:projectId,
-      };
-
-      const response = await axios.post('http://localhost:3000/api/publication/create', pubData);
+      const formData = new FormData();
+      formData.append('title', values.title);
+      formData.append('content', values.content);
+      formData.append('fileLink', values.fileLink);
+      formData.append('userId', values.userId);
+      formData.append('projectId', parseInt(projectId));
+      const response = await axios.post('http://localhost:3000/api/publication/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', 
+        },
+      });
 
       console.log(response.data);
     } catch (error) {
@@ -44,15 +44,16 @@ const PubModal = ({isOpened, handleClose, projectId})=>{
     }
   };
 
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   });
-console.log(projectId)
-    return(
-        <>
-              <Card
+  console.log(projectId)
+  return (
+    <>
+      <Card
         sx={{
           position: 'fixed',
           bottom: '20px',
@@ -75,7 +76,7 @@ console.log(projectId)
           }
         />
 
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit}  encType = "multipart/form-data" >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -105,12 +106,11 @@ console.log(projectId)
               <input
                 accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.xls,.xlsx,.svg"
                 id="contained-button-file"
-                multiple
                 type="file"
-                name="file"
-                encType="multipart/form-data"
-                {...formik.getFieldProps('fileLink')}
+                name="fileLink" 
+                onChange={(event) => formik.setFieldValue('fileLink', event.currentTarget.files[0])}
               />
+
               <label htmlFor="contained-button-file">
                 <Button variant="contained" component="span" startIcon={<AttachFile />}>
                   Joindre un fichier
@@ -126,14 +126,14 @@ console.log(projectId)
         </form>
       </Card>
 
-        </>
-    )
+    </>
+  )
 }
 
-PubModal.propTypes={
-isOpened:PropTypes.boolean,
-handleClose:PropTypes.func,
-projectId: PropTypes.number
+PubModal.propTypes = {
+  isOpened: PropTypes.boolean,
+  handleClose: PropTypes.func,
+  projectId: PropTypes.number
 }
 
 export default PubModal

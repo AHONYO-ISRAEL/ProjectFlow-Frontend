@@ -21,7 +21,6 @@ function stringToColor(string) {
     return {
       sx: {
         bgcolor: stringToColor(name),
-       marginTop: '30px'
       },
       children: initials,
     };

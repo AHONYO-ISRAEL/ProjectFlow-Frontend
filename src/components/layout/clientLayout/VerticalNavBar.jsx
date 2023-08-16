@@ -1,5 +1,5 @@
 import   {useState}from 'react';
-import { styled, useTheme, alpha } from '@mui/material/styles';
+import { styled, useTheme,  } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,10 +15,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
+//import InputBase from '@mui/material/InputBase';
 import PropTypes  from 'prop-types';
+import UserAvatar from '../../UserAvatar'
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../../../features/auth/authSlice'
+import Logos from '../../../images/logo.png'
 
 // Import the icons you want to use
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -28,7 +31,7 @@ import { Link } from 'react-router-dom';
 
 
 
-
+/*
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -67,7 +70,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
+*/
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -116,18 +119,18 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const VerticalNavBar = ({ body}) => {
+  const userInfo = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [isVisible, setIsVisible] = useState(false)
 
 
 
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+    setIsVisible(!isVisible)
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
 
 
@@ -135,56 +138,60 @@ const VerticalNavBar = ({ body}) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{backgroundColor: '  rgba(91,208,236,2)', borderBottomLeftRadius:'5px',  borderBottomRightRadius:'5px'}}     >
-        <Toolbar  >
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Search >
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: '#fff', borderBottomLeftRadius: '5px', borderBottomRightRadius: '5px', }}   >
+        <Toolbar   >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: isVisible ? 'space-between' : '', width: '100%' }} >
 
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon sx={{ color: '  #006DF4' }} />
+            </IconButton>
+            <img src={Logos} style={{ width: '15%', display: isVisible ? 'block' : 'none', }}></img>
+            <div style={{ marginLeft: isVisible ? '' : '76vw' , display:'flex', alignItems:'center'}}>
+              <UserAvatar data = {userInfo.userName} />
+
+            <IconButton  >
+              <LogoutIcon sx={{ color: '#1a1a1a', fontSize: '30px',}} onClick={() => {
+              dispatch(logout)
+              window.location.replace('/');
+            }} />
+            </IconButton>
+            </div>
+  
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
       
-        sx={{
-          backgroundColor:'#727D71',
-          borderRadius:'70px',
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+           backgroundColor: '  #006DF4',
           width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
+          boxSizing: 'border-box',
+        },
+      }}
         variant="persistent"
         anchor="left"
         open={open}
       >
-        <DrawerHeader   sx={{backgroundColor:'##F7F7FF'}}>
-        {/* <Logos/> */}
-          <IconButton onClick={handleDrawerClose}>
+        <DrawerHeader   sx={{backgroundColor:'#fff'}}>
+        <img src={Logos} style={{ width: '80%' }}></img>
+          <IconButton onClick={handleDrawerToggle}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{ backgroundColor:'##F7F7FF'}} >
+        <List  >
           {[
-            { text: 'Dashboard', icon: <DashboardIcon /> , link:'Home' },
-            { text: 'Projects', icon: <FolderIcon />,link:'Projects'  },
+            { text: 'Tableau de Bord', icon: <DashboardIcon /> , link:'Home' },
+            { text: 'Projets', icon: <FolderIcon />,link:'Projects'  },
             { text: 'Collaborate', icon: <GroupsIcon /> , link:'Collaborate' },
           ].map((item) => (
             <Link key={item.text}  to={`../client/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >
@@ -199,7 +206,7 @@ const VerticalNavBar = ({ body}) => {
         </List>
 
       </Drawer>
-      <Main open={open}   sx={{backgroundColor:'#E0EDC5', minHeight:'100vh'}}>
+      <Main open={open}   sx={{alignItems: 'center', justifyContent:'center', alignContent:'center' , backgroundColor:'#f2f2f2', minHeight:'100vh' ,}}  >
         <DrawerHeader />
         {body}
       </Main>

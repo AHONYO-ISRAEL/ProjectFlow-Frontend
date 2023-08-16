@@ -17,6 +17,8 @@ import SectionAccordion from '../SectionAccordion'
 import Avatars from "../Avatars";
 import ProjectPublications from "../ProjectPublications";
 
+import FilesPaper from '../FilesPaper'
+
 const Alert = forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
@@ -55,7 +57,7 @@ const SelectedProject = () => {
 	useEffect(() => {
 		getProjectPubs()
 	})
-
+console.log(pubData)
 
 	const [errorMessage, setErrorMessage] = useState('')
 	const [severity, setSeverity] = useState('')
@@ -212,7 +214,6 @@ const SelectedProject = () => {
 			console.log(error)
 		}
 	}
-	console.log(sectionData)
 	useEffect(() => {
 		getProjectSections()
 	})
@@ -283,7 +284,7 @@ const SelectedProject = () => {
 					{errorMessage}
 				</Alert>
 			</Snackbar>
-			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px', boxShadow: '0px 1px 2px gray' }} >
+			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px', boxShadow: '0px 1px 2px gray', position:'sticky' }} >
 				<Grid container spacing={2}>
 					<Grid item xs={8} sx={{ marginBottom: '20px' }} >
 						<Typography variant="h3" sx={{ color: '#fff' }} >   Project /  {projectData.name}   </Typography>
@@ -348,49 +349,6 @@ const SelectedProject = () => {
 					</Tabs>
 				</Box  >
 			</Box>
-			{/* <Grid container spacing={2} marginTop={'15px'} >
-
-				<Grid item xs={4}>
-					<Card sx={{ height: '180px', }}>
-						<CardContent>
-
-
-							{projectData.clientId === null ? <Button variant="contained" color="primary" sx={{ marginTop: '50px' }} onClick={handleSelectClientOpen} >Ajouter le client </Button> : <Typography variant='h6' > {clientName}  </Typography>
-							}
-
-						</CardContent>
-					</Card>
-				</Grid>
-				<Grid xs={4} item  >
-					<Card sx={{ height: '180px', }}>
-						<CardContent>
-							<Stack direction={'column'} sx={{ alignContent: 'flex-end', display: 'flex' }} >
-								<Stack direction={'row'} sx={{ alignItems: 'end', alignContent: 'flex-end', display: 'flex', marginBottom: '26px' }}>
-									<AvatarGroup>
-										<Avatars Data={projectDevsData} />
-									</AvatarGroup>
-									<Button sx={{ backgroundColor: ' rgba(91,208,236,1)', height: '40px', width: '50px' }} onClick={handleSelectDevOpen} fullWidth >  <AddIcon />  </Button>
-								</Stack>
-								<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff' }}  >Voir les developpeurs du projet </Button>
-							</Stack>
-						</CardContent>
-					</Card>
-				</Grid>
-				<Grid xs={4} item>
-					<Card sx={{ height: '180px' }}
-						onClick={handleSectionModalOpen}
-					>
-						<CardContent sx={{ textAlign: 'center' }}>
-
-							<Stack direction={'column'} sx={{ textAlign: 'center', alignItems: 'center' }}>
-								<AssignmentIcon sx={{ fontSize: 80, cursor: 'pointer' }} />
-								<Button sx={{ backgroundColor: '  rgba(91,208,236,1)', border: 'solid 1px rgba(91,208,236,1) ', color: '#fff', marginTop: '18px' }}  >Ajouter une nouvelle section </Button>
-
-							</Stack>
-						</CardContent>
-					</Card>
-				</Grid>
-			</Grid> */}
 			<Stack direction={'row'} sx={{ justifyContent: 'spaceBetween', alignItems: 'center', alignContentCenter: 'center' }}>
 
 				<SelectDevModal selectDevOpen={selectDevOpen} handleSelectDevClose={handleSelectDevClose} />
@@ -486,7 +444,7 @@ const SelectedProject = () => {
 							<CardContent>
 								<Grid container spacing={2}>
 									<Grid item xs={4} >
-										<Typography variant="h3">{sectionData.length}</Typography>
+										<Typography variant="h3">{sectionData?.length}</Typography>
 									</Grid>
 								</Grid>
 							</CardContent>
@@ -501,10 +459,13 @@ const SelectedProject = () => {
 					</Stack>
 
 
-					<Card sx={{ height: '360px', width: '30vw' }}>
+					<Card sx={{ maxHeight: '500px', width: '30vw' , overflowY: 'auto', paddingRight: '20px' ,}}>
 						<CardHeader title={'Fichiers du projet'} />
 						<CardContent>
-
+						{pubData.map((publication) => (
+							<FilesPaper key={publication.id} files = {publication} />
+//    <a key = {publication.id}  href={`http://localhost:3000/uploads/${publication.fileLink}`} > {publication.fileLink}  </a>
+      ))}
 						</CardContent>
 					</Card>
 

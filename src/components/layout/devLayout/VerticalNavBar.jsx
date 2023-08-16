@@ -1,31 +1,29 @@
-import   {useState}from 'react';
+import { useState } from 'react';
 import { styled, useTheme, alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
+import UserAvatar from '../../UserAvatar'
+import { Box, Drawer, Toolbar, List, Divider, IconButton, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-import PropTypes  from 'prop-types';
+import PropTypes from 'prop-types';
 
-// Import the icons you want to use
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../../../features/auth/authSlice'
+
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from 'react-router-dom';
 import TaskIcon from '@mui/icons-material/Task';// import  Logos from  '../images/logo.png'
+import LogoutIcon from '@mui/icons-material/Logout';
+import Logos from '../../../images/logo.png'
 
 
 
@@ -116,56 +114,60 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const VerticalNavBar = ({ body}) => {
+const VerticalNavBar = ({ body }) => {
+  const userInfo = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [isVisible, setIsVisible] = useState(false)
 
 
 
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+    setIsVisible(!isVisible)
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-
-
+console.log(userInfo.userName)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{backgroundColor:'#E0EDC5', borderRadius:'15px',}}   >
-        <Toolbar  >
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Search   sx={{backgroundColor:'gray'}}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: '#fff', borderBottomLeftRadius: '5px', borderBottomRightRadius: '5px', }}   >
+        <Toolbar   >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: isVisible ? 'space-between' : '', width: '100%' }} >
 
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon sx={{ color: '  #006DF4' }} />
+            </IconButton>
+            <img src={Logos} style={{ width: '15%', display: isVisible ? 'block' : 'none', }}></img>
+            <div style={{ marginLeft: isVisible ? '' : '76vw' , display:'flex', alignItems:'center'}}>
+              <UserAvatar data = {userInfo.userName} />
+
+            <IconButton  >
+              <LogoutIcon sx={{ color: '#1a1a1a', fontSize: '30px',}} onClick={() => {
+              dispatch(logout)
+              window.location.replace('/');
+            }} />
+            </IconButton>
+            </div>
+  
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
-      
-        sx={{
 
+        sx={{
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
+            backgroundColor: '  #006DF4',
             width: drawerWidth,
             boxSizing: 'border-box',
           },
@@ -174,33 +176,33 @@ const VerticalNavBar = ({ body}) => {
         anchor="left"
         open={open}
       >
-        <DrawerHeader   sx={{backgroundColor:'##F7F7FF'}}>
-        {/* <Logos/> */}
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        <DrawerHeader sx={{ backgroundColor: '#fff', borderBottomRightRadius: '5px' }}  >
+          <img src={Logos} style={{ width: '80%' }}></img>
+          <IconButton onClick={handleDrawerToggle}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{ color: '  #006DF4', }} /> : <ChevronRightIcon sx={{ color: '  #006DF4', }} />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{ backgroundColor:'##F7F7FF', }} >
+        <List >
           {[
-            { text: 'Dashboard', icon: <DashboardIcon /> ,link:'Home'},
-            { text: 'Projects', icon: <FolderIcon />,link:'Projects'  },
-            { text: 'Collaborate', icon: <GroupsIcon /> , link:'Collaborate' },
-            {text:'Task', icon:<TaskIcon/>, link:'Task'},
+            { text: 'Tableau de bord', icon: <DashboardIcon />, link: 'Home' },
+            { text: 'Projects', icon: <FolderIcon />, link: 'Projects' },
+            { text: 'Collaborate', icon: <GroupsIcon />, link: 'Collaborate' },
+            { text: 'Task', icon: <TaskIcon />, link: 'Task' },
           ].map((item) => (
-            <Link key={item.text}  to={`../developer/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >
-            <ListItem key={item.text} disablePadding       >
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
+            <Link key={item.text} to={`../developer/${item.link}`} style={{ color: 'inherit', textDecoration: 'none' }}  >
+              <ListItem key={item.text} disablePadding       >
+                <ListItemButton>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
             </Link>
           ))}
         </List>
 
       </Drawer>
-      <Main open={open}   sx={{backgroundColor:'#E0EDC5', minHeight:'100vh'}}>
+      <Main open={open} sx={{ alignItems: 'center', justifyContent: 'center', alignContent: 'center', backgroundColor: '#f2f2f2', minHeight: '100vh', }}  >
         <DrawerHeader />
         {body}
       </Main>

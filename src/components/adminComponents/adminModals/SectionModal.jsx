@@ -64,7 +64,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
     sectionName: yup.string().required('Required'),
     description: yup.string().required('Required'),
     startDate: yup.date().required('Required'),
-    endDate: yup.date().required('Required')
+    endDate: yup.date().min(yup.ref('startDate'), 'End date must be after start date'),
   });
 
   const formik = useFormik({
@@ -100,6 +100,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
       <Modal open={isModalOpen} onClose={closeModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box component="form" onSubmit={formik.handleSubmit} sx={formStyles}>
           <TextField
+          required
             fullWidth
             id="sectionName"
             name="sectionName"
@@ -111,6 +112,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
             sx={{ marginTop: '30px' }}
           />
           <TextField
+          required
             fullWidth
             id="description"
             name="description"
