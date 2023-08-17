@@ -1,6 +1,6 @@
 import {  Card, CardContent, CardHeader, Grid,   Box , Avatar, Typography} from '@mui/material';
 import PropTypes from 'prop-types'
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 function stringToColor(string) {
     let hash = 0;
@@ -29,8 +29,12 @@ function stringToColor(string) {
   }
 
   
+  const ProjectPublications = ({pubData}) => {
+  const formatDate = (date)=>{
+    const dateTime = DateTime.fromISO(date);
+    return dateTime.setLocale('fr').toFormat('dd MMMM  yyyy, t');
 
-const ProjectPublications = ({pubData}) => {
+  }
   return (
     <>
             <Grid spacing={2} container>
@@ -46,7 +50,7 @@ const ProjectPublications = ({pubData}) => {
               />
               <CardContent>
                 <p>{publication.content}</p>
-                <p>{moment(publication.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                <p>{formatDate(publication.createdAt)}</p>
               </CardContent>
             </Card>
           ))}

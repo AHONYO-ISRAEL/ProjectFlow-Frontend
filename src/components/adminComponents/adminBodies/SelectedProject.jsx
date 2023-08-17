@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom"
 import { Typography, Box, Stack, Card, CardContent, Button, Modal, Select, MenuItem, Snackbar, TextField, Grid, AvatarGroup, Tabs, Tab, CardHeader } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
 import AddIcon from '@mui/icons-material/Add';
+import CreateIcon from '@mui/icons-material/Create';
+
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSelector, } from 'react-redux';
@@ -11,13 +13,14 @@ import { v4 as uuidv4 } from 'uuid'
 //import AssignmentIcon from '@mui/icons-material/Assignment';
 import { DateTime } from 'luxon';
 
-import SectionModal from './adminModals/SectionModal'
-import SelectDevModal from './adminModals/SelectDevModal'
-import SectionAccordion from '../SectionAccordion'
-import Avatars from "../Avatars";
-import ProjectPublications from "../ProjectPublications";
+import SectionModal from '../adminModals/SectionModal'
+import SelectDevModal from '../adminModals/SelectDevModal'
+import SectionAccordion from '../../SectionAccordion'
+import Avatars from "../../Avatars";
+import ProjectPublications from "../../ProjectPublications";
 
-import FilesPaper from '../FilesPaper'
+import FilesPaper from '../../FilesPaper'
+import PubModal from "../../PubModal";
 
 const Alert = forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -42,6 +45,13 @@ const formStyles = {
 const SelectedProject = () => {
 	const { projectId } = useParams()
 
+
+	const [isOpened, setIsOpened] = useState(false);
+
+	const handleOpen = () => setIsOpened(true);
+	const handleClose = () => setIsOpened(false);
+
+
 	const [pubData, setPubData] = useState([])
 
 	const getProjectPubs = async () => {
@@ -57,7 +67,7 @@ const SelectedProject = () => {
 	useEffect(() => {
 		getProjectPubs()
 	})
-console.log(pubData)
+	console.log(pubData)
 
 	const [errorMessage, setErrorMessage] = useState('')
 	const [severity, setSeverity] = useState('')
@@ -284,7 +294,7 @@ console.log(pubData)
 					{errorMessage}
 				</Alert>
 			</Snackbar>
-			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px', boxShadow: '0px 1px 2px gray', position:'sticky' }} >
+			<Box sx={{ background: 'linear-gradient(125deg, rgba(91,208,236,1) 60%, rgba(255,255,255,1) 65%)', padding: '35px', borderRadius: '5px', boxShadow: '0px 1px 2px gray', position: 'sticky' }} >
 				<Grid container spacing={2}>
 					<Grid item xs={8} sx={{ marginBottom: '20px' }} >
 						<Typography variant="h3" sx={{ color: '#fff' }} >   Project /  {projectData.name}   </Typography>
@@ -310,6 +320,9 @@ console.log(pubData)
 								},
 								marginTop: '10px'
 							}} onClick={handleSectionModalOpen} >Ajouter une nouvelle section </Button>
+							<Button startIcon={<CreateIcon />} onClick={handleOpen}>
+								Envoyer un message
+							</Button>
 						</Stack>
 					</Grid>
 					<Grid item xs={2} sx={{ padding: '5px', border: 'solid 1px #fff', borderRadius: '5px', }} >
@@ -459,19 +472,21 @@ console.log(pubData)
 					</Stack>
 
 
-					<Card sx={{ maxHeight: '500px', width: '30vw' , overflowY: 'auto', paddingRight: '20px' ,}}>
+					<Card sx={{ maxHeight: '500px', width: '30vw', overflowY: 'auto', paddingRight: '20px', }}>
 						<CardHeader title={'Fichiers du projet'} />
 						<CardContent>
-						{pubData.map((publication) => (
-							<FilesPaper key={publication.id} files = {publication} />
-//    <a key = {publication.id}  href={`http://localhost:3000/uploads/${publication.fileLink}`} > {publication.fileLink}  </a>
-      ))}
+							{pubData.map((publication) => (
+								<FilesPaper key={publication.id} files={publication} />
+								//    <a key = {publication.id}  href={`http://localhost:3000/uploads/${publication.fileLink}`} > {publication.fileLink}  </a>
+							))}
 						</CardContent>
 					</Card>
 
 
 				</Stack>
 			</Box>
+			<PubModal isOpened={isOpened} handleClose={handleClose} projectId={parseInt(projectId)} />
+
 		</>
 		)
 	}

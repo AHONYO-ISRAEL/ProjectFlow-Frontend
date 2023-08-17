@@ -3,7 +3,7 @@ import { Grid, Box, Typography, Skeleton } from '@mui/material';
 import ProjectCard from './ProjectCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getInProgress, resetProgressProjects } from '../features/project/projectSlice';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import FolderOffIcon from '@mui/icons-material/FolderOff';
 import { Card, CardContent, Stack } from '@mui/material';
 import { useState, useEffect } from 'react'
 
@@ -13,7 +13,7 @@ const Projects = () => {
   dispatch(resetProgressProjects());
   const [loading, setLoading] = useState(true);
   const [progressData, setProgressData] = useState([])
-  // Fetch projects from the API and update the Redux state
+  
   const getProgressProjects = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/admin/project/progress/get');
@@ -110,9 +110,9 @@ const Projects = () => {
             ))}
           </Grid>
         ) : (
-          <Card sx={{ maxWidth: 400, margin: 'auto', mt: 10 }}>
+          <Card sx={{ maxWidth: 400, margin: 'auto'}}>
             <CardContent>
-              <AssignmentTurnedInIcon sx={{ fontSize: 80, mb: 2 }} />
+              <FolderOffIcon sx={{ fontSize: 80, mb: 2 }} />
               <Typography variant="h6" color="textSecondary" gutterBottom>
                 No Projects in Progress
               </Typography>

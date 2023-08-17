@@ -23,10 +23,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../../features/auth/authSlice'
 import Logos from '../../../images/logo.png'
 
-// Import the icons you want to use
+// Icons 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
-import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from 'react-router-dom';
 
 
@@ -192,13 +191,12 @@ const VerticalNavBar = ({ body}) => {
           {[
             { text: 'Tableau de Bord', icon: <DashboardIcon /> , link:'Home' },
             { text: 'Projets', icon: <FolderIcon />,link:'Projects'  },
-            { text: 'Collaborate', icon: <GroupsIcon /> , link:'Collaborate' },
           ].map((item) => (
             <Link key={item.text}  to={`../client/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >
             <ListItem key={item.text} disablePadding       >
               <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemIcon sx={{color:'#fff'}}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} sx={{color:'#fff'}} />
               </ListItemButton>
             </ListItem>
             </Link>

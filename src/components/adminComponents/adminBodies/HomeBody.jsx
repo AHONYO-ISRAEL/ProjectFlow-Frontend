@@ -9,7 +9,7 @@ import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from "react-router-dom";
 
 
-import Projects from '../Projects'
+import Projects from '../../Projects'
 
 
 import AddIcon from '@mui/icons-material/Add';
@@ -147,7 +147,7 @@ const navigate = useNavigate()
           <form onSubmit={formik.handleSubmit}  >
             <TextField
             required
-              label="Project Title"
+              label="Titre du projet"
               variant="outlined"
               id="name"
               name="name"
@@ -175,7 +175,7 @@ const navigate = useNavigate()
                             fullWidth
                             id="startDate"
                             name="startDate"
-                            label="Start Date"
+                            label="Date de debut"
                             type="date"
                             value={formik.values.startDate}
                             onChange={formik.handleChange}
@@ -190,7 +190,7 @@ const navigate = useNavigate()
                             fullWidth
                             id="endDate"
                             name="endDate"
-                            label="End Date"
+                            label="Date de fin"
                             type="date"
                             value={formik.values.endDate}
                             onChange={formik.handleChange}
@@ -204,7 +204,7 @@ const navigate = useNavigate()
             <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
               loading={loading}
             >
-              Register Project
+             Ajouter le projet
             </LoadingButton>
           </form>
         </Box>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { styled, useTheme, alpha } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import UserAvatar from '../../UserAvatar'
 import { Box, Drawer, Toolbar, List, Divider, IconButton, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,8 +10,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
+//import SearchIcon from '@mui/icons-material/Search';
+//import InputBase from '@mui/material/InputBase';
 import PropTypes from 'prop-types';
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,15 +19,14 @@ import { logout } from '../../../features/auth/authSlice'
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
-import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from 'react-router-dom';
-import TaskIcon from '@mui/icons-material/Task';// import  Logos from  '../images/logo.png'
+import TaskIcon from '@mui/icons-material/Task';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Logos from '../../../images/logo.png'
 
 
 
-
+/*
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -66,7 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-
+*/
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -187,14 +186,13 @@ console.log(userInfo.userName)
           {[
             { text: 'Tableau de bord', icon: <DashboardIcon />, link: 'Home' },
             { text: 'Projects', icon: <FolderIcon />, link: 'Projects' },
-            { text: 'Collaborate', icon: <GroupsIcon />, link: 'Collaborate' },
             { text: 'Task', icon: <TaskIcon />, link: 'Task' },
           ].map((item) => (
             <Link key={item.text} to={`../developer/${item.link}`} style={{ color: 'inherit', textDecoration: 'none' }}  >
               <ListItem key={item.text} disablePadding       >
                 <ListItemButton>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
+                  <ListItemIcon  sx={{color:'#fff'}}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} sx={{color:'#fff'}} />
                 </ListItemButton>
               </ListItem>
             </Link>

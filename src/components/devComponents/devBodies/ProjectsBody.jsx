@@ -58,12 +58,10 @@ const ProjectsBody = () => {
                 {project.name}
               </Typography>
               <Typography sx={{ fontSize: 14 }}>{project.description}</Typography>
-              <Typography sx={{ fontSize: 12, color: '#777' }}>
-                Start Date: {new Date(project.startDate).toDateString()}
-              </Typography>
+
               {project.endDate && (
                 <Typography sx={{ fontSize: 12, color: '#777' }}>
-                  End Date: {new Date(project.endDate).toDateString()}
+                  Date de fin: {new Date(project.endDate).toDateString()}
                 </Typography>
               )}
               <Typography>Status: {project.status}</Typography>

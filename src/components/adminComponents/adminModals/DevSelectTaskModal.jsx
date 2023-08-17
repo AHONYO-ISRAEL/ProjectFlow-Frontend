@@ -30,9 +30,9 @@ const handleProjectDevs = ()=>{
 }
 return(
     <>
-    <Modal open={selectTaskOpen} onClose={handleSelectTaskClose} aria-labelledby="modal-modal-selectClient" aria-describedby="modal-modal-description">
+    <Modal open={selectTaskOpen} onClose={handleSelectTaskClose} >
     <Box component="form" sx={formStyles}>
-      <Stack direction="row">
+      <Stack direction="row" sx={{alignItems:'center', display:'flex', alignContent:'center', justifyContent:'center'}}>
         <Autocomplete
           multiple
           id="task-select"
@@ -47,7 +47,7 @@ return(
         />
 
       </Stack>
-      <Button sx={{ backgroundColor: 'rgba(91,208,236,1)' }} onClick={ handleProjectDevs}>
+      <Button sx={{ backgroundColor: 'rgba(91,208,236,1)' , marginTop:'30px', marginLeft:'30%'}} onClick={ handleProjectDevs}>
         Valider
       </Button>
 

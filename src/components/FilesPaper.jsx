@@ -54,7 +54,7 @@ const baseUrl = 'http://localhost:3000/'
     return (
         <>
 
-            <Paper key={files.id} sx={{ padding: '20px', marginBottom: '20px', }} >
+            <Paper key={files.id} sx={{ padding: '20px', marginBottom: '20px', background: 'linear-gradient(119deg, rgba(0,109,244,1) 24%, rgba(91,208,236,1) 69%)'}} >
                 <Grid container >
                     <Grid item xs={3}  sx={{textAlign:'left'}}>
                         {
@@ -62,7 +62,7 @@ const baseUrl = 'http://localhost:3000/'
                         }
                     </Grid>
                     <Grid item xs={6} sx={{textAlign:'center'}}>
-                        <Typography>
+                        <Typography  sx={{color:'#fff'}}>
                             {
                                 files.fileLink
                             }

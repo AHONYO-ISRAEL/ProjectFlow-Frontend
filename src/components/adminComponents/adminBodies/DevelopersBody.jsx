@@ -18,7 +18,7 @@ import {
 import { blue, orange, green } from '@mui/material/colors';
 import ManageAccountsBody from './ManageAccountsBody';
 import { MoreVert } from '@mui/icons-material';
-import DevSelectTaskModal from './adminModals/DevSelectTaskModal';
+import DevSelectTaskModal from '../adminModals/DevSelectTaskModal';
 
 const DevelopersBody = () => {
   const [devId, setDevId] = useState()

@@ -14,7 +14,6 @@ const TaskBoard = ({ projectId, userId }) => {
       const sectionResponse = await axios.get(`http://localhost:3000/api/developer/${userId}/project/${projectId}/sections/tasks/get`)
       if (sectionResponse.status === 200) {
         setSectionsData(sectionResponse.data)
-        console.log(sectionResponse.data)
       }
     } catch (error) {
       console.error(error)

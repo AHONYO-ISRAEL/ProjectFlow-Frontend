@@ -1,9 +1,9 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Grid, Box, Typography } from '@mui/material';
-import ProjectCard from '../ProjectCard';
+import ProjectCard from '../../ProjectCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProjects , resetAllProjects} from '../../features/project/allProjectSlice';
+import { getAllProjects , resetAllProjects} from '../../../features/project/allProjectSlice';
 import { Link, useParams } from 'react-router-dom';
 
 const ProjectsBody = () => {

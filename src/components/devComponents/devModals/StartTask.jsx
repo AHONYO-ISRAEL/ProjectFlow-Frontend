@@ -31,8 +31,9 @@ const StartTask = ({ devId, startTaskOpen, handleStartTaskClose }) => {
   const handleSubmit = async () => {
     try {
       const newStatus = 'In Progress'
+      const startDate = new Date()
       setLoading(true);
-      const response = await axios.post(`http://localhost:3000/api/task/${taskId}/update/status/${newStatus}`);
+      const response = await axios.post(`http://localhost:3000/api/task/${taskId}/update/status/${newStatus}`, {startDate});
         if(response.status === 200){
             setSnackbarOpen(true);
 
@@ -87,7 +88,7 @@ const StartTask = ({ devId, startTaskOpen, handleStartTaskClose }) => {
               )}
             </RadioGroup>
           </FormControl>
-          <Button variant="contained" onClick={handleSubmit} disabled={loading}>
+          <Button variant="contained" onClick={handleSubmit} disabled={loading} sx={{display: devTasks?.length === 0?'none':'block'}}>
             {loading ? 'Loading...' : 'Submit'}
           </Button>
           </Stack>

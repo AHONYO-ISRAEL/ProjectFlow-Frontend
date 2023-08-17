@@ -1,15 +1,25 @@
+import { useState } from 'react';
 import { useFormik } from 'formik';
-import { Button, Card, CardHeader, Grid, TextField, IconButton, } from '@mui/material';
+import { Button, Card, CardHeader, Grid, TextField, IconButton,  Snackbar} from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
+import { LoadingButton } from '@mui/lab';
+
 
 const PubModal = ({ isOpened, handleClose, projectId }) => {
   const userInfo = useSelector((state) => state.auth);
   const userId = userInfo.userId;
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // State for snackbar
+  const [loading, setLoading] = useState(false);
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const validationSchema = Yup.object({
     title: Yup.string().required('*Le titre est requis'),
@@ -26,6 +36,7 @@ const PubModal = ({ isOpened, handleClose, projectId }) => {
 
   const onSubmit = async (values) => {
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append('title', values.title);
       formData.append('content', values.content);
@@ -38,9 +49,15 @@ const PubModal = ({ isOpened, handleClose, projectId }) => {
         },
       });
 
-      console.log(response.data);
+      if(response.status===201){
+        setLoading(false); 
+        setSnackbarOpen(true);
+        formik.resetForm();
+      }
+
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -118,14 +135,26 @@ const PubModal = ({ isOpened, handleClose, projectId }) => {
               </label>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" color="primary" type="submit">
-                Envoyer
-              </Button>
+            <LoadingButton
+            variant="contained"
+            color="primary"
+            type="submit"
+            loading={loading} // Set loading state
+            loadingPosition="start"
+            startIcon={<AttachFile />}
+          >
+            Envoyer
+          </LoadingButton>
             </Grid>
           </Grid>
         </form>
       </Card>
-
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        message="Votre publication a été envoyée"
+      />
     </>
   )
 }

@@ -1,5 +1,5 @@
 import   {useState}from 'react';
-import { styled, useTheme, alpha } from '@mui/material/styles';
+import { styled, useTheme,  } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,20 +19,19 @@ import UserAvatar from '../../UserAvatar'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../../features/auth/authSlice'
 
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
+//import SearchIcon from '@mui/icons-material/Search';
+//import InputBase from '@mui/material/InputBase';
 import PropTypes  from 'prop-types';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
-import GroupsIcon from '@mui/icons-material/Groups';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import { Link } from 'react-router-dom';
 import { AssignmentInd } from '@mui/icons-material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Logos from '../../../images/logo.png'
 
-
+/*
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -71,7 +70,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: '20ch',
     },
   },
-}));
+}));*/
 
 const drawerWidth = 260;
 
@@ -195,15 +194,14 @@ const VerticalNavBar = ({ body},) => {
           {[
             { text: 'Tableau de bord', icon: <DashboardIcon /> , link:'Home' },
             { text: 'Projets', icon: <FolderIcon />,link:'Projects'  },
-            { text: 'Collaboration', icon: <GroupsIcon /> , link:'Collaborate' },
             {text: 'Developpeurs',icon: <EngineeringIcon/>, link:'Developers'},
             {text:'Clients', icon: <AssignmentInd/>  , link:'Clients'}
           ].map((item) => (
             <Link key={item.text}  to={`../admin/${item.link}`} style={{color:'inherit', textDecoration: 'none'}}  >
             <ListItem key={item.text} disablePadding       >
               <ListItemButton>
-                <ListItemIcon  >{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text}     />
+                <ListItemIcon sx={{color:'#fff'}}  >{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} sx={{color:'#fff'}}     />
               </ListItemButton>
             </ListItem>
             </Link>
