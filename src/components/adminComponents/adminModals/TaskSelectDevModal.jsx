@@ -104,7 +104,7 @@ const TaskSelectDevModal = ({ handleSelectDevClose, selectDevOpen, taskId }) => 
     onSubmit,
   });
 
-  const handleProjectDevs = () => {
+  const handleTaskDevs = () => {
     try {
       selectedDevs.forEach(async (selectedDev) => {
         const response2 = await axios.post(`http://localhost:3000/api/admin/task/assign/dev`, { userId: selectedDev.id, taskId: taskId });
@@ -112,6 +112,8 @@ const TaskSelectDevModal = ({ handleSelectDevClose, selectDevOpen, taskId }) => 
           setErrorMessage('Developers added successfully');
           setSeverity('success');
           setSnackState({ ...snackState, snackOpen: true });
+          setSelectedDevs({})
+          handleSelectDevClose()
         }
       });
     } catch (error) {
@@ -149,7 +151,7 @@ const TaskSelectDevModal = ({ handleSelectDevClose, selectDevOpen, taskId }) => 
               <AddIcon />
             </Button>
           </Stack>
-          <Button sx={{ backgroundColor: 'rgba(91,208,236,1)' }} onClick={handleProjectDevs}>
+          <Button sx={{ backgroundColor: 'rgba(91,208,236,1)' }} onClick={handleTaskDevs}>
             Valider
           </Button>
           <Modal open={clientModalOpen} onClose={handleClientModalClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">

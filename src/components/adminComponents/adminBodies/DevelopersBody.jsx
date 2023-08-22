@@ -17,27 +17,27 @@ import {
 } from '@mui/material';
 import { blue, orange, green } from '@mui/material/colors';
 import ManageAccountsBody from './ManageAccountsBody';
-import { MoreVert } from '@mui/icons-material';
 import DevSelectTaskModal from '../adminModals/DevSelectTaskModal';
 
 const DevelopersBody = () => {
   const [devId, setDevId] = useState()
   const [devTaskData, setDevTaskData] = useState([])
 
-  const getUnassignedTasks = async () => {
+  const getUnassignedTasks = async (devId) => {
     try {
+      setDevTaskData([]);
       const taskResponse = await axios.get(`http://localhost:3000/api/admin/dev/${devId}/tasks/unassigned/get`);
       if (taskResponse.status === 200) {
-        const allTasks = taskResponse.data.unassignedTasks.reduce((tasksArray, data) => {
-          tasksArray.push(...data.tasks);
-          return tasksArray;
-        }, []);
-        setDevTaskData(allTasks);
+       setDevTaskData(taskResponse.data.unassignedTasks.unassigned);
+        console.log(taskResponse.data.unassignedTasks.unassigned)
       }
     } catch (error) {
       console.log(error);
     }
   };
+  
+
+  console.log(devTaskData)
 
   const [devData, setDevData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -61,7 +61,6 @@ const DevelopersBody = () => {
   useEffect(() => {
     getdevData();
   }, []);
-  console.log(devData)
 
   return (
     <>
@@ -170,10 +169,9 @@ const DevelopersBody = () => {
                   </TableCell>
                   <TableCell sx={{ width: 'calc(100% / 4 )', textAlign: 'center' }}> <Button onClick={() => {
                     setDevId(parseInt(dev.id))
-                    getUnassignedTasks()
+                    getUnassignedTasks(devId)
                     handleSelectTaskOpen()
                   }}>Affecter a une tache </Button>  </TableCell>
-                  <DevSelectTaskModal handleSelectTaskClose={handleSelectTaskClose} selectTaskOpen={selectTaskOpen} devId={devId}  devTaskData={devTaskData} />
                 </TableRow>
               </>
             ))}
@@ -181,6 +179,8 @@ const DevelopersBody = () => {
         </Table>
       </TableContainer>
       <ManageAccountsBody open={open} handleClose={handleClose} role={'developer'} />
+      <DevSelectTaskModal handleSelectTaskClose={handleSelectTaskClose} selectTaskOpen={selectTaskOpen} devId={devId}  devTaskData={devTaskData} />
+
     </>
   );
 };

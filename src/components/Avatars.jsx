@@ -1,4 +1,4 @@
-import { Avatar,  } from '@mui/material';
+import { Avatar} from '@mui/material';
 import PropTypes from 'prop-types';
 
 
@@ -28,20 +28,25 @@ function stringToColor(string) {
     };
   }
 
-const Avatars = ({Data})=>{
+
+
+const Avatars = ({Data,})=>{
     return(
-
- 
-        
+<>
+{
           Data?.map((dev)=>(<Avatar key={dev.id}     {...stringAvatar(dev.user.username)} />))
-        
+          
+}
 
+          </>
     )
 
 }
 
 Avatars.propTypes={
     Data : PropTypes.object,
+    handleDevClose: PropTypes.func,
+    isDevOpen:PropTypes.bool
 }
 
 export default Avatars

@@ -77,7 +77,7 @@ const [taskId, setTaskId] = useState()
         description: yup.string().required('Description is required'),
         startDate: yup.date(),
         durationDays: yup.number().integer().min(0, 'Duration Days must be greater than or equal to 0'),
-        durationHours: yup.number().integer().min(0, 'Duration Hours must be greater than or equal to 0'),
+        durationHours: yup.number().integer().min(1, 'Duration Hours must be greater than or equal to 0'),
         endDate: yup.date().min(yup.ref('startDate'), 'End date must be after start date'),
     });
 
@@ -106,7 +106,7 @@ const [taskId, setTaskId] = useState()
 
                 if (response.status === 200) {
                     setLoading(false)
-                    setErrorMessage('Task added successfully')
+                    setErrorMessage('Tâche ajoutée avec succès')
                     setSeverity('success')
                     setSnackState({ ...snackState, snackOpen: true })
                     setTaskId(response.data.task.id)
@@ -164,7 +164,7 @@ useEffect(()=>{
                     <Typography sx={{ marginLeft: '50px', left: 0 }}  >  {Data.status} </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Button variant="outlined" fullWidth onClick={handleTaskModalOpen}     >Add Tasks to {Data.sectionName} </Button>
+                    <Button variant="outlined" fullWidth onClick={handleTaskModalOpen}     >Ajouter une tâche à  {Data.sectionName} </Button>
                     <Stack direction={'row'}>
                         <TaskCards   tasks={tasksWithDevs} />
 
@@ -179,7 +179,7 @@ useEffect(()=>{
                 <Box sx={formStyles}  >
                     <form onSubmit={taskFormik.handleSubmit}>
                         <TextField
-                            label="Task title"
+                            label="Nom de la tâche"
                             id="taskName"
                             name="taskName"
                             value={taskFormik.values.taskName}
@@ -188,11 +188,12 @@ useEffect(()=>{
                             helperText={taskFormik.touched.taskName && taskFormik.errors.taskName}
                             fullWidth
                         />
-                        <TextField
+                        
+                        {/* <TextField
                             fullWidth
                             id="startDate"
                             name="startDate"
-                            label="Start Date"
+                            label="Debut de la tâche"
                             type="date"
                             value={taskFormik.values.startDate}
                             onChange={taskFormik.handleChange}
@@ -207,7 +208,7 @@ useEffect(()=>{
                             fullWidth
                             id="endDate"
                             name="endDate"
-                            label="End Date"
+                            label="Fin de la tâche"
                             type="date"
                             value={taskFormik.values.endDate}
                             onChange={taskFormik.handleChange}
@@ -217,11 +218,11 @@ useEffect(()=>{
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                        />
+                        /> */}
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px', justifyContent: 'spaceBetween' }}>
 
                             <TextField
-                                label="Duration Days"
+                                label="Durée en jours"
                                 id="durationDays"
                                 name="durationDays"
                                 type="number"
@@ -229,9 +230,10 @@ useEffect(()=>{
                                 onChange={taskFormik.handleChange}
                                 error={taskFormik.touched.durationDays && Boolean(taskFormik.errors.durationDays)}
                                 helperText={taskFormik.touched.durationDays && taskFormik.errors.durationDays}
+                                inputProps={{ min: 0 }}
                             />
                             <TextField
-                                label="Duration Hours"
+                                label="Durée en heures"
                                 id="durationHours"
                                 name="durationHours"
                                 type="number"
@@ -240,6 +242,7 @@ useEffect(()=>{
                                 error={taskFormik.touched.durationHours && Boolean(taskFormik.errors.durationHours)}
                                 helperText={taskFormik.touched.durationHours && taskFormik.errors.durationHours}
                                 sx={{ marginRight: '10px' }}
+                                inputProps={{ min: 1 }}
 
                             />
 

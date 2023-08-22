@@ -40,7 +40,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
     endDate: ''
   };
 
-  const onSubmit = async (values)=>{
+  const onSubmit = async (values, {resetForm})=>{
     try{
         setLoading(true)
 
@@ -48,9 +48,11 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
   if(response.status===201){
     setLoading(false)
 
-    setErrorMessage(`Section ${values.sectionName} created successfully`)
+    setErrorMessage(`la section ${values.sectionName} à été crée avec succes`)
     setSeverity('success')
     setSnackState({...snackState,  snackOpen : true})}  
+    resetForm()
+    closeModal()
     }catch(error){
         setLoading(false)
 
@@ -61,10 +63,10 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
   }
 
   const validationSchema = yup.object({
-    sectionName: yup.string().required('Required'),
-    description: yup.string().required('Required'),
-    startDate: yup.date().required('Required'),
-    endDate: yup.date().min(yup.ref('startDate'), 'End date must be after start date'),
+    sectionName: yup.string().required('Nom de section requise'),
+    description: yup.string().required('Desciption requise'),
+    startDate: yup.date().required('Date requise'),
+    endDate: yup.date().min(yup.ref('startDate'), 'La date de fin doit être apres la date de debut ').required('Date requise'),
   });
 
   const formik = useFormik({
@@ -104,7 +106,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
             fullWidth
             id="sectionName"
             name="sectionName"
-            label="Section Name"
+            label="Nom de la section"
             value={formik.values.sectionName}
             onChange={formik.handleChange}
             error={formik.touched.sectionName && Boolean(formik.errors.sectionName)}
@@ -129,7 +131,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
   fullWidth
   id="startDate"
   name="startDate"
-  label="Start Date"
+  label="Date de debut"
   type="date"
   value={formik.values.startDate}
   onChange={formik.handleChange}
@@ -144,7 +146,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
             fullWidth
             id="endDate"
             name="endDate"
-            label="End Date"
+            label="Date de fin"
             type="date"
             value={formik.values.endDate}
             onChange={formik.handleChange}
@@ -158,7 +160,7 @@ const SectionModal = ({  isModalOpen, closeModal }) => {
          <LoadingButton type="submit" variant="contained" color="primary" sx={{ marginTop: '50px' }}
             loading = {loading}
             >
-Create Section      
+Crée la section  
       </LoadingButton>
         </Box>
       </Modal>

@@ -1,92 +1,121 @@
-import {Typography,Box,Grid,Card,CardContent,Paper,List,ListItem,IconButton,ListItemText,LinearProgress,Button} from '@mui/material';
-  import { useSelector } from 'react-redux';
-  import { useEffect, useState } from 'react';
-  import axios from 'axios';
-  import { MoreVert , NavigateNext, NavigateBefore,} from '@mui/icons-material';
-  import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
+import  { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  Box,
+  IconButton,
+  TextField,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  LinearProgress,
+  Button,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
+import { MoreVert, NavigateNext, NavigateBefore } from '@mui/icons-material';
 import CreateIcon from '@mui/icons-material/Create';
 import PubModal from '../../PubModal';
 
-
-
-  const HomeBody = () => {
-    const userInfo = useSelector((state) => state.auth);
-    const [clientProjects, setClientProjects] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(0);
-
-const [currentProject, setCurrentProject]  =  useState()
-useEffect(() => {
-  setCurrentProject(clientProjects[activeIndex]?.id);
-}, [activeIndex, clientProjects]);
-
+const HomeBody = () => {
+  const userInfo = useSelector((state) => state.auth);
+  const [clientProjects, setClientProjects] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentProject, setCurrentProject] = useState();
   const [isOpened, setIsOpened] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleOpen = () => setIsOpened(true);
   const handleClose = () => setIsOpened(false);
 
-    const getClientProjects = async () => {
-      try {
-        const clientResponse = await axios.get(`http://localhost:3000/api/client/${userInfo.userId}/project/get`);
-        console.log(clientResponse.data);
-        if (clientResponse.status === 200) {
-          setClientProjects(clientResponse.data);
-        }
-      } catch (error) {
-        console.log(error);
+  const getClientProjects = async () => {
+    try {
+      const clientResponse = await axios.get(
+        `http://localhost:3000/api/client/${userInfo.userId}/project/get`
+      );
+      console.log(clientResponse.data);
+      if (clientResponse.status === 200) {
+        setClientProjects(clientResponse.data);
       }
-    };
-  
-    useEffect(() => {
-      getClientProjects();
-    },[]);
-  
-    const handleNextProject = () => {
-        setActiveIndex((prevIndex) =>
-          prevIndex === clientProjects.length - 1 ? 0 : prevIndex + 1
-        );
-      };
-    
-      const handlePreviousProject = () => {
-        setActiveIndex((prevIndex) =>
-          prevIndex === 0 ? clientProjects.length - 1 : prevIndex - 1
-        );
-      };
-    return (
-      <>
-   <Box
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getClientProjects();
+  });
+
+  useEffect(() => {
+    setCurrentProject(clientProjects[activeIndex]?.id);
+  }, [activeIndex, clientProjects]);
+
+  const handleNextProject = () => {
+    setActiveIndex((prevIndex) =>
+      prevIndex === filteredProjects.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePreviousProject = () => {
+    setActiveIndex((prevIndex) =>
+      prevIndex === 0 ? filteredProjects.length - 1 : prevIndex - 1
+    );
+  };
+
+  const filteredProjects = clientProjects.filter((project) =>
+    project.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <>
+      <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         marginBottom="10px"
       >
         <Box>
-           <IconButton onClick={handlePreviousProject}>
-        <NavigateBefore />
-      </IconButton>
-      <IconButton onClick={handleNextProject}>
-        <NavigateNext />
-      </IconButton>
-      </Box>
-      <Box>
-        {clientProjects.map((_, index) => (
-          <IconButton
-            key={index}
-            color={index === activeIndex ? 'primary' : 'default'}
-            onClick={() => setActiveIndex(index)}
-            sx={{fontSize:'20px'}}
-          >
-            <PanoramaFishEyeIcon/>
+          <IconButton onClick={handlePreviousProject}>
+            <NavigateBefore />
           </IconButton>
-        ))}
+          <IconButton onClick={handleNextProject}>
+            <NavigateNext />
+          </IconButton>
+        </Box>
+        <Box>
+          {filteredProjects.map((_, index) => (
+            <IconButton
+              key={index}
+              color={index === activeIndex ? 'primary' : 'default'}
+              onClick={() => setActiveIndex(index)}
+              sx={{ fontSize: '20px' }}
+            >
+               {index === activeIndex ? '●' : <span>.</span>}
+            </IconButton>
+          ))}
+        </Box>
+        <Box>
+          <TextField
+            label="Rechercher un projet"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{ marginLeft: '10px' }}
+          />
         </Box>
       </Box>
-        
-        {clientProjects.map((clientProject, index) => (
-          <div key={clientProject.id}   style={{
+      {filteredProjects.map((clientProject, index) => (
+        <div
+          key={clientProject.id}
+          style={{
             display: index === activeIndex ? 'block' : 'none',
             marginTop: '20px',
-          }}>
-            <Grid container spacing={2} sx={{ padding: '5px' }}>
+          }}
+        >
+ <Grid container spacing={2} sx={{ padding: '5px' }}>
               <Grid spacing={2} container sx={{ marginBottom: '30px' }} xs={8}>
                 <Grid item xs={12}>
                   <Box
@@ -202,12 +231,10 @@ useEffect(() => {
         Envoyer un message
       </Button>
 <PubModal  isOpened={isOpened}  handleClose={handleClose}  projectId={parseInt(currentProject)}  />
-          </div>
-          
-        ))}
-      </>
-    );
-  };
-  
-  export default HomeBody;
-  
+                 </div>
+      ))}
+    </>
+  );
+};
+
+export default HomeBody;

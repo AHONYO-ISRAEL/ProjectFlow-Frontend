@@ -118,11 +118,15 @@ const SelectDevModal = ({handleSelectDevClose,selectDevOpen })=>{
 		try {
 
 			const response2 = axios.post(`http://localhost:3000/api/admin/project/assign/dev`, { userId: selectedDev, projectId:projectId })
+			setErrorMessage('Le developpeur a été ajouté avec succès')
+			setSeverity('success')
+			setSnackState({ ...snackState, snackOpen: true })
+			setSelectedDev('')
 			if (response2.status === 200) {
-				setErrorMessage('dev added successfully')
+				setErrorMessage('Le developpeur a été ajouté avec succès')
 				setSeverity('success')
 				setSnackState({ ...snackState, snackOpen: true })
-	
+				setSelectedDev('')
 				handleSelectDevClose()
 			}
 		} catch (error) {

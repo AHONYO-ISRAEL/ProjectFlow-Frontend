@@ -67,7 +67,7 @@ const PubModal = ({ isOpened, handleClose, projectId }) => {
     validationSchema,
     onSubmit,
   });
-  console.log(projectId)
+
   return (
     <>
       <Card

@@ -21,6 +21,7 @@ import ProjectPublications from "../../ProjectPublications";
 
 import FilesPaper from '../../FilesPaper'
 import PubModal from "../../PubModal";
+import DevProjectList from "../DevProjectList";
 
 const Alert = forwardRef(function Alert(props, ref) {
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -67,7 +68,6 @@ const SelectedProject = () => {
 	useEffect(() => {
 		getProjectPubs()
 	})
-	console.log(pubData)
 
 	const [errorMessage, setErrorMessage] = useState('')
 	const [severity, setSeverity] = useState('')
@@ -101,11 +101,11 @@ const SelectedProject = () => {
 		email: yup.string().email('Invalid email address').required('Required'),
 		roleName: yup.string().oneOf(['Client']).required('Role is required'),
 	});
-	const onSubmit = async (values) => {
+	const onSubmit = async (values,{resetForm}) => {
 		try {
 			const response = await axios.post('http://localhost:3000/api/auth/signup', values)
 			if (response.status === 401) {
-				setErrorMessage('User alreadyregistered')
+				setErrorMessage('Cet utilisateur est deja enregistre')
 				setSeverity('error')
 				setSnackState({ ...snackState, snackOpen: true })
 			}
@@ -113,6 +113,7 @@ const SelectedProject = () => {
 				setErrorMessage(values.roleName + `   ` + values.username + `'s ` + `  account created successfully`)
 				setSeverity('success')
 				setSnackState({ ...snackState, snackOpen: true })
+				resetForm()
 			}
 			getClients()
 
@@ -201,6 +202,7 @@ const SelectedProject = () => {
 				setErrorMessage('Client added successfully')
 				setSeverity('success')
 				setSnackState({ ...snackState, snackOpen: true })
+				handleSelectClientClose()
 			}
 		} catch (error) {
 			console.log(error)
@@ -229,7 +231,7 @@ const SelectedProject = () => {
 	})
 
 
-
+const [projectDevs, setProjectDevs] = useState({})
 	const [projectDevsData, setProjectDevsData] = useState([])
 
 	const getProjectDevs = async () => {
@@ -237,8 +239,7 @@ const SelectedProject = () => {
 			const devResponse = await axios.get(`http://localhost:3000/api/admin/project/${projectId}/dev`)
 			if (devResponse.status === 200) {
 				setProjectDevsData(devResponse.data.projects.developers)
-
-
+				setProjectDevs(devResponse.data.projects)
 			}
 		} catch (error) {
 			console.log(error)
@@ -285,10 +286,15 @@ const SelectedProject = () => {
 		}, [sectionData]);
 	*/
 
+	const [isDevOpen, setIsDevOpen] = useState(false)
+	const handleDevOpen = () => setIsDevOpen(true)
+	const handleDevClose = () => setIsDevOpen(false)
+
 	if (loading) {
 		return <h1>Loading</h1>
 	} else {
 		return (<>
+			<DevProjectList  projectDev={projectDevs} projectId={parseInt(projectId)} isDevOpen={isDevOpen} handleDevClose={handleDevClose} />
 			<Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleSnackClose} anchorOrigin={{ vertical, horizontal }} >
 				<Alert onClose={handleSnackClose} severity={severity} sx={{ width: '100%' }}>
 					{errorMessage}
@@ -343,7 +349,10 @@ const SelectedProject = () => {
 
 									</Stack>)
 							}
-							<AvatarGroup sx={{ marginLeft: '15px', }}  >
+							<AvatarGroup sx={{ marginLeft: '15px', cursor:'pointer'}} onClick={()=>{
+							handleDevOpen()
+							}}  
+							>
 								<Avatars Data={projectDevsData} />
 							</AvatarGroup>
 						</Stack>

@@ -115,36 +115,8 @@ return(
                             helperText={taskFormik.touched.taskName && taskFormik.errors.taskName}
                             fullWidth
                         />
-                        <TextField
-                            fullWidth
-                            id="startDate"
-                            name="startDate"
-                            label="Start Date"
-                            type="date"
-                            value={taskFormik.values.startDate}
-                            onChange={taskFormik.handleChange}
-                            error={taskFormik.touched.startDate && Boolean(taskFormik.errors.startDate)}
-                            helperText={taskFormik.touched.startDate && taskFormik.errors.startDate}
-                            sx={{ marginTop: '30px' }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField
-                            fullWidth
-                            id="endDate"
-                            name="endDate"
-                            label="End Date"
-                            type="date"
-                            value={taskFormik.values.endDate}
-                            onChange={taskFormik.handleChange}
-                            error={taskFormik.touched.endDate && Boolean(taskFormik.errors.endDate)}
-                            helperText={taskFormik.touched.endDate && taskFormik.errors.endDate}
-                            sx={{ marginTop: '30px' }}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+
+
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px', justifyContent: 'spaceBetween' }}>
 
                             <TextField
@@ -156,6 +128,8 @@ return(
                                 onChange={taskFormik.handleChange}
                                 error={taskFormik.touched.durationDays && Boolean(taskFormik.errors.durationDays)}
                                 helperText={taskFormik.touched.durationDays && taskFormik.errors.durationDays}
+                                inputProps={{ min: 0 }}
+
                             />
                             <TextField
                                 label="Duration Hours"
@@ -167,6 +141,7 @@ return(
                                 error={taskFormik.touched.durationHours && Boolean(taskFormik.errors.durationHours)}
                                 helperText={taskFormik.touched.durationHours && taskFormik.errors.durationHours}
                                 sx={{ marginRight: '10px' }}
+                                inputProps={{ min: 1}}
 
                             />
 

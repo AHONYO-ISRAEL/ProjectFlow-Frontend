@@ -26,6 +26,7 @@ const formStyles = {
   padding: '70px',
   borderRadius: '5px',
 };
+const baseUrl = 'http://localhost:3000/api/'
 
 const ManageAccountsBody = ({ open, handleClose, role }) => {
   const userInfo = useSelector((state) => state.auth);
@@ -42,6 +43,16 @@ const ManageAccountsBody = ({ open, handleClose, role }) => {
   const handleSnackClose = () => {
     setSnackState({ ...snackState, snackOpen: false });
   };
+
+
+const sendMail = async(userId, email)=>{
+  try{
+ await axios.post(baseUrl+'auth/send', {userId, email})
+ console.log(userId)
+  }catch(error){
+    console.log(error)
+  }
+}
 
   const initialValues = {
     username: '',
@@ -63,17 +74,21 @@ const ManageAccountsBody = ({ open, handleClose, role }) => {
       const response = await axios.post('http://localhost:3000/api/auth/signup', values);
       setIsLoading(false); 
       if (response.status === 401) {
-        setErrorMessage('User already registered');
+        setErrorMessage('Cet utilsateur est deja enregistre');
         setSeverity('error');
         setSnackState({ ...snackState, snackOpen: true });
       } else if (response.status === 200) {
         setErrorMessage(
-          values.roleName + `   ` + values.username + `'s ` + `  account created successfully`
+      `Compte cree avec succes `
         );
+console.log(response.data.newUser.id)
         setSeverity('success');
         setSnackState({ ...snackState, snackOpen: true });
         resetForm()
         handleClose()
+        const newUserId = response.data.newUser.id
+        const newUserMail= response.data.newUser.email
+        sendMail(newUserId, newUserMail)
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'An error occurred';

@@ -1,10 +1,15 @@
-import { Card, CardHeader, CardContent, Grid, AvatarGroup, IconButton } from "@mui/material";
+import { Card, CardHeader, CardContent, Grid, AvatarGroup, IconButton, } from "@mui/material";
 import PropTypes from 'prop-types'
 import Avatars from './Avatars';
 import { blue, orange, green, } from '@mui/material/colors';
 import CreateIcon from '@mui/icons-material/Create';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UpdateTask from './adminComponents/adminModals/UpdateTask'
+import DevList from "./DevList";
+
+
+
+
 const TaskCards = ({ tasks }) => {
 
   const taskStatuses = ["Not Started", "In Progress", "Completed"];
@@ -13,11 +18,17 @@ const TaskCards = ({ tasks }) => {
   const handleTaskModalClose = () => setTaskModalOpen(false);
 
   const [clickedTask, setClickedTask] = useState({})
+  const [isDevOpen, setIsDevOpen] = useState(false)
+  const handleDevOpen = () => setIsDevOpen(true)
+  const handleDevClose = () => setIsDevOpen(false)
 
+  const [selectedTask, setSelectedTask] = useState([])
 
 
   return (
     <>
+                          <UpdateTask taskModalOpen={taskModalOpen} handleTaskModalClose={handleTaskModalClose} task={clickedTask} />
+
       <Grid container spacing={2}>
         {taskStatuses.map((status, index) => (
           <Grid key={index} item xs={4}>
@@ -40,7 +51,7 @@ const TaskCards = ({ tasks }) => {
 
                   .map((task) => (
                     <>
-                      <UpdateTask taskModalOpen={taskModalOpen} handleTaskModalClose={handleTaskModalClose} task={clickedTask} />
+
                       <Card
                         key={task.id}
                         sx={{ mb: 2, background: 'linear-gradient(135deg, rgba(91,208,236,1) 70%, rgba(255,255,255,1) 75%)', color: 'black' }}
@@ -63,19 +74,28 @@ const TaskCards = ({ tasks }) => {
                         }
                         />
                         <CardContent>
-                          <AvatarGroup>
+                          <AvatarGroup onClick={() => {
+                            setSelectedTask(task.id)
+                            handleDevOpen()
+                          }
+                     
+                          }
+                          sx={{
+                            cursor:'pointer'
+                          }}>
                             <Avatars Data={task.developers} />
                           </AvatarGroup>
-                        </CardContent>
-
-                      </Card>
+                        </CardContent>    </Card>
                     </>
+
                   ))}
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
+              <DevList taskId={parseInt(selectedTask)} isDevOpen={isDevOpen} handleDevClose={handleDevClose} />
+
     </>
   );
 };
