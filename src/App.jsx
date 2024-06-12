@@ -53,10 +53,10 @@ function App() {
     <>
     <ThemeProvider theme={lightTheme}   >
       <CssBaseline/>
-<Public/>
-   <Admin/>
-<Client/>
-<Developer/>
+      <Public/>
+      <Admin/>
+      <Client/>
+      <Developer/>
 </ThemeProvider>
     </>
   )
